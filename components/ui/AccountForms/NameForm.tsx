@@ -1,9 +1,9 @@
 'use client';
 
-import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
-import { updateName } from '@/utils/auth-helpers/server';
+import Button from '@/components/ui/Button2';
+import Card from '@/components/ui/Card2';
 import { handleRequest } from '@/utils/auth-helpers/client';
+import { updateName } from '@/utils/auth-helpers/server';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 

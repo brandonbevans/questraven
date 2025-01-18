@@ -1,12 +1,12 @@
 'use client';
 
-import Button from '@/components/ui/Button';
-import { useRouter, usePathname } from 'next/navigation';
-import { useState } from 'react';
+import Button from '@/components/ui/Button2';
+import Card from '@/components/ui/Card2';
+import { Tables } from '@/types_db';
 import { createStripePortal } from '@/utils/stripe/server';
 import Link from 'next/link';
-import Card from '@/components/ui/Card';
-import { Tables } from '@/types_db';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type Subscription = Tables<'subscriptions'>;
 type Price = Tables<'prices'>;

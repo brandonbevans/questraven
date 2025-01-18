@@ -5,6 +5,9 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
   const {
     data: { user }
   } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User not found');
+  }
   return user;
 });
 
@@ -37,3 +40,92 @@ export const getUserDetails = cache(async (supabase: SupabaseClient) => {
     .single();
   return userDetails;
 });
+
+export const getGames = cache(async (supabase: SupabaseClient) => {
+  const { data: games, error } = await supabase.from('games').select('*');
+  if (error) {
+    throw new Error('Failed to fetch games');
+  }
+  return games;
+});
+
+export const getGame = cache(
+  async (supabase: SupabaseClient, namespace: string) => {
+    const { data, error } = await supabase
+      .from('games')
+      .select('*')
+      .eq('namespace', namespace)
+      .single();
+
+    if (error) {
+      throw new Error('Failed to fetch game');
+    }
+    return data;
+  }
+);
+
+export const createChat = cache(
+  async (supabase: SupabaseClient, userId: string, gameId: string) => {
+    const { data, error } = await supabase
+      .from('chats')
+      .insert({
+        user_id: userId,
+        game_id: gameId
+      })
+      .select()
+      .single();
+    if (error) {
+      throw new Error('Failed to create chat');
+    }
+    return data;
+  }
+);
+
+export const getChat = cache(
+  async (supabase: SupabaseClient, chatId: string) => {
+    const { data, error } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('id', chatId)
+      .single();
+    return data;
+  }
+);
+
+export const getChatByUserAndGame = cache(
+  async (supabase: SupabaseClient, userId: string, gameId: string) => {
+    const { data, error } = await supabase
+      .from('chats')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('game_id', gameId)
+      .single();
+    return data;
+  }
+);
+
+export const getMessagesByChat = cache(
+  async (supabase: SupabaseClient, chatId: string) => {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .eq('chat_id', chatId);
+    if (error) {
+      throw new Error('Failed to fetch messages');
+    }
+    return data;
+  }
+);
+
+export const createNote = cache(
+  async (
+    supabase: SupabaseClient,
+    note: { user_id: string; content: string; type: string }
+  ) => {
+    const { data, error } = await supabase.from('notes').insert(note);
+    if (error) {
+      throw new Error('Failed to create note');
+    }
+    return data;
+  }
+);

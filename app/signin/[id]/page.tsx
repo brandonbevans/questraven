@@ -1,29 +1,32 @@
 import Logo from '@/components/icons/Logo';
+import EmailSignIn from '@/components/ui/AuthForms/EmailSignIn';
+import ForgotPassword from '@/components/ui/AuthForms/ForgotPassword';
+import OauthSignIn from '@/components/ui/AuthForms/OauthSignIn';
+import PasswordSignIn from '@/components/ui/AuthForms/PasswordSignIn';
+import Separator from '@/components/ui/AuthForms/Separator';
+import SignUp from '@/components/ui/AuthForms/Signup';
+import UpdatePassword from '@/components/ui/AuthForms/UpdatePassword';
+import { Card } from '@/components/ui/card';
+import {
+  getAuthTypes,
+  getDefaultSignInView,
+  getRedirectMethod,
+  getViewTypes
+} from '@/utils/auth-helpers/settings';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import {
-  getAuthTypes,
-  getViewTypes,
-  getDefaultSignInView,
-  getRedirectMethod
-} from '@/utils/auth-helpers/settings';
-import Card from '@/components/ui/Card';
-import PasswordSignIn from '@/components/ui/AuthForms/PasswordSignIn';
-import EmailSignIn from '@/components/ui/AuthForms/EmailSignIn';
-import Separator from '@/components/ui/AuthForms/Separator';
-import OauthSignIn from '@/components/ui/AuthForms/OauthSignIn';
-import ForgotPassword from '@/components/ui/AuthForms/ForgotPassword';
-import UpdatePassword from '@/components/ui/AuthForms/UpdatePassword';
-import SignUp from '@/components/ui/AuthForms/Signup';
 
-export default async function SignIn({
-  params,
-  searchParams
-}: {
+interface PageProps {
   params: { id: string };
-  searchParams: { disable_button: boolean };
-}) {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'edge';
+
+export default async function SignIn({ params, searchParams }: PageProps) {
+  const disable_button = searchParams.disable_button === 'true';
   const { allowOauth, allowEmail, allowPassword } = getAuthTypes();
   const viewTypes = getViewTypes();
   const redirectMethod = getRedirectMethod();
@@ -81,14 +84,14 @@ export default async function SignIn({
             <EmailSignIn
               allowPassword={allowPassword}
               redirectMethod={redirectMethod}
-              disableButton={searchParams.disable_button}
+              disableButton={disable_button}
             />
           )}
           {viewProp === 'forgot_password' && (
             <ForgotPassword
               allowEmail={allowEmail}
               redirectMethod={redirectMethod}
-              disableButton={searchParams.disable_button}
+              disableButton={disable_button}
             />
           )}
           {viewProp === 'update_password' && (

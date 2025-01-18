@@ -1,14 +1,14 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/Button2';
 import LogoCloud from '@/components/ui/LogoCloud';
 import type { Tables } from '@/types_db';
+import { getErrorRedirect } from '@/utils/helpers';
 import { getStripe } from '@/utils/stripe/client';
 import { checkoutWithStripe } from '@/utils/stripe/server';
-import { getErrorRedirect } from '@/utils/helpers';
 import { User } from '@supabase/supabase-js';
 import cn from 'classnames';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type Subscription = Tables<'subscriptions'>;
