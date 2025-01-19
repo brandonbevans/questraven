@@ -1,27 +1,21 @@
-import {
-  convertMessage,
-  FREE_MESSAGE_LIMIT
-} from '@/components/ui/ChatComponent/helper';
-import { MyMessage } from '@/components/ui/ChatComponent/type';
 import { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 import {
   createChat,
-  createMessage,
   getChatByUserAndGame,
   getMessagesByChat,
   getMessagesCount,
   getSubscription
 } from '@/utils/supabase/queries';
-import { AppendMessage, useExternalStoreRuntime } from '@assistant-ui/react';
+import { useEdgeRuntime } from '@assistant-ui/react';
 import { useEffect, useState } from 'react';
-
 type Game = Tables<'games'>;
+type Message = Tables<'messages'>;
 
 export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   const [hasSubscription, setHasSubscription] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [messages, setMessages] = useState<MyMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [lastMessage, setLastMessage] = useState('');
   const [userchatId, setUserChatId] = useState('');
@@ -98,58 +92,16 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGame, supabase]);
 
-  const onNew = async (message: AppendMessage) => {
-    if (message.content[0]?.type !== 'text')
-      throw new Error('Only text messages are supported');
-
-    const input = message.content[0].text;
-    setLastMessage('');
-    try {
-      setMessages((currentConversation) => [
-        ...currentConversation,
-        { role: 'user', content: input }
-      ]);
-      setIsRunning(true);
-
-      // Create user message in supabase
-      createMessage(supabase, userchatId, 'user', input);
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          gameId: selectedGame.id,
-          gameName: selectedGame.namespace,
-          chatId: userchatId,
-          messages: [...messages, { role: 'user', content: input }]
-        })
-      });
-      const messagedata = await response.json();
-      if (messagedata.message) {
-        createMessage(supabase, userchatId, 'assistant', messagedata.message);
-      } else {
-        console.log(
-          'failed to create message from RAG response: ',
-          messagedata
-        );
-      }
-      setMessages((currentConversation) => [
-        ...currentConversation,
-        { role: 'assistant', content: messagedata.message }
-      ]);
-      setLastMessage(messagedata.message);
-    } catch (error) {
-      console.error('Error sending message:', error);
-    } finally {
-      setIsRunning(false);
+  const runtime = useEdgeRuntime({
+    api: '/api/chat',
+    initialMessages: messages.map((message) => ({
+      role: message.role as 'assistant' | 'user' | 'system',
+      content: message.content,
+      id: message.id
+    })),
+    body: {
+      namespace: selectedGame.namespace
     }
-  };
-
-  const runtime = useExternalStoreRuntime({
-    isRunning,
-    messages,
-    isDisabled: !hasSubscription && userMessagesCount >= FREE_MESSAGE_LIMIT,
-    convertMessage,
-    onNew
   });
 
   return {

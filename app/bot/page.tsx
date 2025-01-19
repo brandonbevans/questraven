@@ -1,28 +1,15 @@
 'use client';
 
+import ChatInterface from '@/components/ui/ChatComponent/ChatInterface/ChatInterface';
 import Sidebar from '@/components/ui/Sidebar';
 import { Button } from '@/components/ui/button';
 import { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { getGames } from '@/utils/supabase/queries';
 import { ChevronRight } from 'lucide-react';
-import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
-
-// Dynamically import ChatInterface with no SSR
-const DynamicChatInterface = dynamic(
-  () => import('@/components/ui/ChatComponent/ChatInterface/ChatInterface'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-screen items-center justify-center bg-zinc-950">
-        <div className="animate-pulse text-zinc-400">Loading chat...</div>
-      </div>
-    )
-  }
-);
 
 export default function Bot() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -83,7 +70,7 @@ export default function Bot() {
               <ChevronRight className="h-5 w-5" />
             </Button>
           )}
-          <DynamicChatInterface selectedGame={selectedGame} />
+          <ChatInterface selectedGame={selectedGame} />
         </div>
       </div>
     </div>

@@ -10,14 +10,15 @@ export type Metadata = {
 
 // The function `getContext` is used to retrieve the context of a given message
 export const getContext = async (
-  message: string,
+  message: { text: string }[],
   namespace: string,
   maxTokens = 3000,
   minScore = 0.7,
   getOnlyText = true
 ): Promise<string | ScoredPineconeRecord[]> => {
   // Get the embeddings of the input message
-  const embedding = await getEmbeddings(message);
+
+  const embedding = await getEmbeddings(message[0].text);
 
   // Retrieve the matches for the embeddings from the specified namespace
   const matches = await getMatchesFromEmbeddings(embedding, 3, namespace);

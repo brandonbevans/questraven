@@ -1,4 +1,3 @@
-import { AI } from '@/app/actions';
 import Footer from '@/components/ui/Footer';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
@@ -8,7 +7,6 @@ import Head from 'next/head';
 import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
 import 'styles/main.css';
-import { RunTimeProvider } from './RunTimeProvider';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -88,38 +86,34 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
-    <AI>
-      <RunTimeProvider>
-        <html lang="en">
-          <Head>
-            <Script
-              id="json-ld"
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-              strategy="beforeInteractive"
-            />
-            {process.env.NODE_ENV === 'production' && (
-              <>
-                <GoogleAnalytics gaId="G-T5LLMZVJ2S" />
-                <GoogleTagManager gtmId="GTM-P2DTLHJ6" />
-              </>
-            )}
-          </Head>
-          <body className="bg-black">
-            <Navbar />
-            <main
-              id="skip"
-              className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
-            >
-              {children}
-            </main>
-            <Footer />
-            <Suspense>
-              <Toaster />
-            </Suspense>
-          </body>
-        </html>
-      </RunTimeProvider>
-    </AI>
+    <html lang="en">
+      <Head>
+        <Script
+          id="json-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          strategy="beforeInteractive"
+        />
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <GoogleAnalytics gaId="G-T5LLMZVJ2S" />
+            <GoogleTagManager gtmId="GTM-P2DTLHJ6" />
+          </>
+        )}
+      </Head>
+      <body className="bg-black">
+        <Navbar />
+        <main
+          id="skip"
+          className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+        >
+          {children}
+        </main>
+        <Footer />
+        <Suspense>
+          <Toaster />
+        </Suspense>
+      </body>
+    </html>
   );
 }
