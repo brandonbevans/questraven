@@ -1,5 +1,5 @@
 import { Tables } from '@/types_db';
-import { getDataSource } from '../../../lib/pinecone';
+import { getDataSource } from '@/utils/pinecone';
 type Message = Tables<'messages'>;
 
 export const getLlamaindexResponse = async (

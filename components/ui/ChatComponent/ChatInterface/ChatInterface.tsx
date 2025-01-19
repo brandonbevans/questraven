@@ -4,14 +4,19 @@ import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/us
 import { FREE_MESSAGE_LIMIT } from '@/components/ui/ChatComponent/helper';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import TypingEffect from '@/components/ui/ChatComponent/typing';
-import { Thread } from '@assistant-ui/react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 import { CircleLoader } from 'react-spinners';
 
+// Dynamically import Thread with no SSR
+const DynamicThread = dynamic(
+  () => import('@assistant-ui/react').then((mod) => mod.Thread),
+  { ssr: false }
+);
+
 export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
-  // Add loading state for initial render
   const [mounted, setMounted] = useState(false);
 
   const {
@@ -23,14 +28,21 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     setLastMessage
   } = useChatInterface({ selectedGame });
 
-  // Handle client-side mounting
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Return null on server-side render
+  // Prevent hydration issues by not rendering anything on server
   if (!mounted) {
-    return null;
+    return (
+      <div className="flex h-[calc(100vh-theme(space.16))] flex-col px-4">
+        <div className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 shadow-xl flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
+            <div className="animate-pulse">Loading...</div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -83,7 +95,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
               </div>
             </div>
           ) : (
-            <Thread
+            <DynamicThread
               runtime={runtime}
               assistantMessage={{
                 components: {

@@ -1,3 +1,4 @@
+// import { PineconeVectorStore } from '@llamaindex/pinecone';
 import {
   OpenAI,
   OpenAIEmbedding,
@@ -5,7 +6,6 @@ import {
   VectorStoreIndex,
   serviceContextFromDefaults
 } from 'llamaindex';
-// import { PineconeVectorStore } from "llamaindex/vector-store/PineconeVectorStore";
 
 export async function getDataSource(gameName: string) {
   const ctx = serviceContextFromDefaults({

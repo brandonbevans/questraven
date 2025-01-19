@@ -123,9 +123,15 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
           messages: [...messages, { role: 'user', content: input }]
         })
       });
-      const messagedata: { message: string } = await response.json();
-      createMessage(supabase, userchatId, 'assistant', messagedata.message);
-
+      const messagedata = await response.json();
+      if (messagedata.message) {
+        createMessage(supabase, userchatId, 'assistant', messagedata.message);
+      } else {
+        console.log(
+          'failed to create message from RAG response: ',
+          messagedata
+        );
+      }
       setMessages((currentConversation) => [
         ...currentConversation,
         { role: 'assistant', content: messagedata.message }

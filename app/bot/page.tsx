@@ -1,24 +1,38 @@
 'use client';
 
-import ChatInterface from '@/components/ui/ChatComponent/ChatInterface/ChatInterface';
-// import Header from '@/components/Header'
 import Sidebar from '@/components/ui/Sidebar';
 import { Button } from '@/components/ui/button';
 import { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { getGames } from '@/utils/supabase/queries';
 import { ChevronRight } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
+
+// Dynamically import ChatInterface with no SSR
+const DynamicChatInterface = dynamic(
+  () => import('@/components/ui/ChatComponent/ChatInterface/ChatInterface'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex h-screen items-center justify-center bg-zinc-950">
+        <div className="animate-pulse text-zinc-400">Loading chat...</div>
+      </div>
+    )
+  }
+);
 
 export default function Bot() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<Game | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const supabase = createClient();
 
   useEffect(() => {
+    setMounted(true);
     async function loadInitialGame() {
       try {
         const games = await getGames(supabase);
@@ -36,7 +50,7 @@ export default function Bot() {
     loadInitialGame();
   }, []);
 
-  if (isLoading || !selectedGame) {
+  if (!mounted || isLoading || !selectedGame) {
     return (
       <div className="flex h-screen items-center justify-center bg-zinc-950">
         <div className="animate-pulse text-zinc-400">Loading...</div>
@@ -69,7 +83,7 @@ export default function Bot() {
               <ChevronRight className="h-5 w-5" />
             </Button>
           )}
-          <ChatInterface selectedGame={selectedGame} />
+          <DynamicChatInterface selectedGame={selectedGame} />
         </div>
       </div>
     </div>

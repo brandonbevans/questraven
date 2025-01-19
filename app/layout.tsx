@@ -3,7 +3,8 @@ import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata, Viewport } from 'next';
-
+import Head from 'next/head';
+import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
 import 'styles/main.css';
 
@@ -87,16 +88,20 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      {process.env.NODE_ENV === 'production' && (
-        <>
-          <GoogleAnalytics gaId="G-T5LLMZVJ2S" />
-          <GoogleTagManager gtmId="GTM-P2DTLHJ6" />
-        </>
-      )}
+      <Head>
+        <Script
+          id="json-ld"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          strategy="beforeInteractive"
+        />
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <GoogleAnalytics gaId="G-T5LLMZVJ2S" />
+            <GoogleTagManager gtmId="GTM-P2DTLHJ6" />
+          </>
+        )}
+      </Head>
       <body className="bg-black">
         <Navbar />
         <main
