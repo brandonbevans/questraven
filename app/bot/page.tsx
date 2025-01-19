@@ -1,5 +1,6 @@
 'use client';
 
+import ChatInterface from '@/components/ui/ChatComponent/ChatInterface/ChatInterface';
 // import Header from '@/components/Header'
 import Sidebar from '@/components/ui/Sidebar';
 import { Button } from '@/components/ui/button';
@@ -13,14 +14,15 @@ type Game = Tables<'games'>;
 
 export default function Bot() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [selectedGame, setSelectedGame] = useState<Game>();
+  const [selectedGame, setSelectedGame] = useState<Game | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const supabase = createClient();
+
   useEffect(() => {
     async function loadInitialGame() {
       try {
         const games = await getGames(supabase);
-        if (!games) {
+        if (!games || games.length === 0) {
           throw new Error('Failed to fetch initial game');
         }
         setSelectedGame(games[0]);
@@ -44,7 +46,6 @@ export default function Bot() {
 
   return (
     <div className="flex flex-col h-screen bg-zinc-950">
-      {/* <Header /> */}
       <div className="flex flex-1">
         <div
           className={`${isSidebarOpen ? 'w-80' : 'w-0'} flex-shrink-0 transition-all duration-300`}
@@ -68,7 +69,7 @@ export default function Bot() {
               <ChevronRight className="h-5 w-5" />
             </Button>
           )}
-          {/* <ChatInterface selectedGame={selectedGame} /> */}
+          <ChatInterface selectedGame={selectedGame} />
         </div>
       </div>
     </div>

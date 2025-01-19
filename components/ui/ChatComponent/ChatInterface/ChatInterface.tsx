@@ -1,16 +1,19 @@
 'use client';
 
-import { Thread } from '@assistant-ui/react';
-import Image from 'next/image';
-import Markdown from 'react-markdown';
-import { CircleLoader } from 'react-spinners';
-
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { FREE_MESSAGE_LIMIT } from '@/components/ui/ChatComponent/helper';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import TypingEffect from '@/components/ui/ChatComponent/typing';
+import { Thread } from '@assistant-ui/react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import Markdown from 'react-markdown';
+import { CircleLoader } from 'react-spinners';
 
 export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
+  // Add loading state for initial render
+  const [mounted, setMounted] = useState(false);
+
   const {
     hasSubscription,
     userMessagesCount,
@@ -19,6 +22,16 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     lastMessage,
     setLastMessage
   } = useChatInterface({ selectedGame });
+
+  // Handle client-side mounting
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Return null on server-side render
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <div className="flex h-[calc(100vh-theme(space.16))] flex-col px-4">
@@ -57,19 +70,17 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
         <div className="flex flex-col h-full overflow-y-auto mt-2">
           {isLoading ? (
             <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
-              <>
-                {selectedGame.logo_url && (
-                  <Image
-                    src={selectedGame.logo_url}
-                    alt={`${selectedGame.name} Logo`}
-                    width={50}
-                    height={50}
-                  />
-                )}
-                <div className="text-lg text-zinc-600 mt-2">
-                  Loading {selectedGame.name}
-                </div>
-              </>
+              {selectedGame.logo_url && (
+                <Image
+                  src={selectedGame.logo_url}
+                  alt={`${selectedGame.name} Logo`}
+                  width={50}
+                  height={50}
+                />
+              )}
+              <div className="text-lg text-zinc-600 mt-2">
+                Loading {selectedGame.name}
+              </div>
             </div>
           ) : (
             <Thread

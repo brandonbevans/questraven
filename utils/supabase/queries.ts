@@ -99,7 +99,7 @@ export const getChatByUserAndGame = cache(
       .select('*')
       .eq('user_id', userId)
       .eq('game_id', gameId)
-      .single();
+      .maybeSingle();
     return data;
   }
 );
@@ -112,6 +112,42 @@ export const getMessagesByChat = cache(
       .eq('chat_id', chatId);
     if (error) {
       throw new Error('Failed to fetch messages');
+    }
+    return data;
+  }
+);
+
+export const getMessagesCount = cache(
+  async (supabase: SupabaseClient, userId: string) => {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const { data, error } = await supabase
+      .from('messages')
+      .select('id, chat_id, chat(*)', { count: 'exact' })
+      .eq('user_id', userId)
+      .eq('messages.role', 'user')
+      .gt('messages.created_at', thirtyDaysAgo.toISOString());
+    if (error) {
+      throw new Error('Failed to fetch message count');
+    }
+
+    return data?.length || 0;
+  }
+);
+
+export const createMessage = cache(
+  async (
+    supabase: SupabaseClient,
+    chatId: string,
+    role: 'user' | 'assistant',
+    content: string
+  ) => {
+    const { data, error } = await supabase
+      .from('messages')
+      .insert({ chat_id: chatId, role: role, content: content });
+    if (error) {
+      throw new Error('Failed to create message');
     }
     return data;
   }

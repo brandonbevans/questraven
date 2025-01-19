@@ -12,7 +12,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { createClient } from '@/utils/supabase/client';
-import { createNote, getUser } from '@/utils/supabase/queries';
+import { createNote } from '@/utils/supabase/queries';
 import { useState } from 'react';
 
 interface SubmitImprovementDialogProps {
@@ -34,10 +34,11 @@ export default function SubmitImprovementDialog({
 
     setIsSubmitting(true);
     try {
-      const user = await getUser(supabase);
-      console.log('Creating note...');
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
       const response = await createNote(supabase, {
-        user_id: user.id,
+        user_id: user?.id ?? '',
         content: `${improvement}`,
         type: 'FEEDBACK'
       });

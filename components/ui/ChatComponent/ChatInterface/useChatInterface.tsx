@@ -4,13 +4,15 @@ import {
 } from '@/components/ui/ChatComponent/helper';
 import { MyMessage } from '@/components/ui/ChatComponent/type';
 import { Tables } from '@/types_db';
+import { createClient } from '@/utils/supabase/client';
 import {
   createChat,
+  createMessage,
   getChatByUserAndGame,
   getMessagesByChat,
-  getUser
+  getMessagesCount,
+  getSubscription
 } from '@/utils/supabase/queries';
-import { createClient } from '@/utils/supabase/server';
 import { AppendMessage, useExternalStoreRuntime } from '@assistant-ui/react';
 import { useEffect, useState } from 'react';
 
@@ -33,7 +35,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
       console.log('Auth event:', event);
       console.log('Session:', session);
     });
-
     // Cleanup subscription on unmount
     return () => subscription.unsubscribe();
   }, [supabase]);
@@ -41,14 +42,9 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   useEffect(() => {
     async function checkSubscription() {
       try {
-        const response = await fetch('/api/subscription/status');
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch subscription status');
-        }
-
-        const data = await response.json();
-        setHasSubscription(Boolean(data.hasActiveSubscription));
+        const data = await getSubscription(supabase);
+        console.log('getSubscription: ', data);
+        setHasSubscription(Boolean(data));
       } catch (error) {
         console.error('Error checking subscription:', error);
         setHasSubscription(false);
@@ -56,9 +52,13 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     }
 
     async function getUserMessagesCount() {
-      const userMessagesCount = await fetch('/api/messages/count')
-        .then((res) => res.json())
-        .then((data) => data.count);
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      const userMessagesCount = await getMessagesCount(
+        supabase,
+        user?.id ?? ''
+      );
       setUserMessagesCount(userMessagesCount);
     }
 
@@ -71,26 +71,22 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
       setIsLoading(true);
       setMessages([]);
       try {
-        const user = await getUser(supabase);
-        const chat = await getChatByUserAndGame(
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+        let chat = await getChatByUserAndGame(
           supabase,
-          user.id,
+          user?.id ?? '',
           selectedGame.id
         );
-        let chatId = chat?.id;
         if (!chat) {
-          const newChat = await createChat(
-            supabase,
-            user?.id ?? '',
-            selectedGame.id
-          );
-          chatId = newChat.id;
+          chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
         } else {
           // You can do something with chat here if needed (e.g., setState)
           const userMessages = await getMessagesByChat(supabase, chat.id);
           setMessages(userMessages);
         }
-        setUserChatId(chatId);
+        setUserChatId(chat.id);
       } catch (error) {
         console.log('Error fetching chat:', error);
       } finally {
@@ -115,6 +111,8 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
       ]);
       setIsRunning(true);
 
+      // Create user message in supabase
+      createMessage(supabase, userchatId, 'user', input);
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -125,8 +123,9 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
           messages: [...messages, { role: 'user', content: input }]
         })
       });
-
       const messagedata: { message: string } = await response.json();
+      createMessage(supabase, userchatId, 'assistant', messagedata.message);
+
       setMessages((currentConversation) => [
         ...currentConversation,
         { role: 'assistant', content: messagedata.message }
