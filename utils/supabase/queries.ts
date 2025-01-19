@@ -124,10 +124,9 @@ export const getMessagesCount = cache(
 
     const { data, error } = await supabase
       .from('messages')
-      .select('id, chat_id, chat(*)', { count: 'exact' })
-      .eq('user_id', userId)
-      .eq('messages.role', 'user')
-      .gt('messages.created_at', thirtyDaysAgo.toISOString());
+      .select('id, chat_id, chats(id, user_id)', { count: 'exact' })
+      .eq('role', 'user')
+      .gt('created_at', thirtyDaysAgo.toISOString());
     if (error) {
       throw new Error('Failed to fetch message count');
     }
