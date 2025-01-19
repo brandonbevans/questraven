@@ -1,11 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { SignOut } from '@/utils/auth-helpers/server';
-import { handleRequest } from '@/utils/auth-helpers/client';
 import Logo from '@/components/icons/Logo';
-import { usePathname, useRouter } from 'next/navigation';
+import { handleRequest } from '@/utils/auth-helpers/client';
+import { SignOut } from '@/utils/auth-helpers/server';
 import { getRedirectMethod } from '@/utils/auth-helpers/settings';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import s from './Navbar.module.css';
 
 interface NavlinksProps {
@@ -22,8 +22,8 @@ export default function Navlinks({ user }: NavlinksProps) {
           <Logo />
         </Link>
         <nav className="ml-6 space-x-2 lg:block">
-          <Link href="/" className={s.link}>
-            Pricing
+          <Link href="/subscribe" className={s.link}>
+            Subscription
           </Link>
           {user && (
             <Link href="/account" className={s.link}>
