@@ -6,7 +6,7 @@ import PasswordSignIn from '@/components/ui/AuthForms/PasswordSignIn';
 import Separator from '@/components/ui/AuthForms/Separator';
 import SignUp from '@/components/ui/AuthForms/Signup';
 import UpdatePassword from '@/components/ui/AuthForms/UpdatePassword';
-import { Card } from '@/components/ui/card';
+import Card from '@/components/ui/Card2';
 import {
   getAuthTypes,
   getDefaultSignInView,
@@ -17,16 +17,9 @@ import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-interface PageProps {
-  params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+export default async function SignIn(props: any) {
+  const { params, searchParams } = props;
 
-export const dynamic = 'force-dynamic';
-export const runtime = 'edge';
-
-export default async function SignIn({ params, searchParams }: PageProps) {
-  const disable_button = searchParams.disable_button === 'true';
   const { allowOauth, allowEmail, allowPassword } = getAuthTypes();
   const viewTypes = getViewTypes();
   const redirectMethod = getRedirectMethod();
@@ -38,14 +31,15 @@ export default async function SignIn({ params, searchParams }: PageProps) {
   if (typeof params.id === 'string' && viewTypes.includes(params.id)) {
     viewProp = params.id;
   } else {
+    const cookieStore = await cookies();
     const preferredSignInView =
-      cookies().get('preferredSignInView')?.value || null;
+      cookieStore.get('preferredSignInView')?.value || null;
     viewProp = getDefaultSignInView(preferredSignInView);
     return redirect(`/signin/${viewProp}`);
   }
 
   // Check if the user is already logged in and redirect to the account page if so
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user }
@@ -84,14 +78,14 @@ export default async function SignIn({ params, searchParams }: PageProps) {
             <EmailSignIn
               allowPassword={allowPassword}
               redirectMethod={redirectMethod}
-              disableButton={disable_button}
+              disableButton={searchParams.disable_button}
             />
           )}
           {viewProp === 'forgot_password' && (
             <ForgotPassword
               allowEmail={allowEmail}
               redirectMethod={redirectMethod}
-              disableButton={disable_button}
+              disableButton={searchParams.disable_button}
             />
           )}
           {viewProp === 'update_password' && (

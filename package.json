@@ -40,7 +40,7 @@
     "google-one-tap": "^1.0.6",
     "llamaindex": "^0.8.31",
     "lucide-react": "^0.473.0",
-    "next": "14.2.3",
+    "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.4.0",

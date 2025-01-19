@@ -10,7 +10,7 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
 export default async function Account() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const [user, userDetails, subscription] = await Promise.all([
     getUser(supabase),
     getUserDetails(supabase),
