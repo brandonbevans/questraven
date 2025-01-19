@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { getLlamaindexResponse } from './llamai';
 
 import { Tables } from '@/types_db';
+export const runtime = 'nodejs';
 
 type Message = Tables<'messages'>;
 
