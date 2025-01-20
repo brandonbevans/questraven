@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react';
 export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
-  const { hasSubscription, userMessagesCount, isLoading, runtime } =
+  const { hasSubscription, userMessagesCount, isLoading, runtime, messages } =
     useChatInterface({ selectedGame });
 
   useEffect(() => {
@@ -31,12 +31,15 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     );
   }
 
+  const isLimitReached =
+    !hasSubscription && userMessagesCount >= FREE_MESSAGE_LIMIT;
+
   return (
     <div className="flex h-[calc(100vh-theme(space.16))] flex-col px-4">
       <div className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 shadow-xl flex flex-col overflow-hidden">
         {!hasSubscription && (
           <div className="shrink-0 px-4 pt-4 text-sm text-zinc-400">
-            {userMessagesCount >= FREE_MESSAGE_LIMIT ? (
+            {isLimitReached ? (
               <div className="text-red-400">
                 You&apos;ve reached your free message limit.
                 <button
@@ -56,7 +59,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
                 <button
                   className="ml-2 text-blue-500 hover:text-blue-400 underline"
                   onClick={() => {
-                    /* Add upgrade flow later */
+                    router.push('/subscribe');
                   }}
                 >
                   Upgrade for unlimited access
@@ -81,32 +84,18 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
               </div>
             </div>
           ) : (
-            <Thread
-              runtime={runtime}
-              welcome={{
-                message: `I know all about ${selectedGame.name}. Speak to the Raven.`
-              }}
-              // assistantMessage={{
-              //   components: {
-              //     Text: (text) => (
-              //       <div className="w-full">
-              //         {text.status.type === 'running' ? (
-              //           <div className="">
-              //             <CircleLoader color="white" size={15} />
-              //           </div>
-              //         ) : text.text === lastMessage ? (
-              //           <TypingEffect
-              //             text={text.text}
-              //             setLastMessage={setLastMessage}
-              //           />
-              //         ) : (
-              //           <Markdown>{text.text}</Markdown>
-              //         )}
-              //       </div>
-              //     )
-              //   }
-              // }}
-            />
+            <div
+              className={`flex-1 ${
+                isLimitReached ? 'pointer-events-none opacity-50' : ''
+              }`}
+            >
+              <Thread
+                runtime={runtime}
+                welcome={{
+                  message: `I know all about ${selectedGame.name}. Speak to the Raven.`
+                }}
+              />
+            </div>
           )}
         </div>
       </div>
