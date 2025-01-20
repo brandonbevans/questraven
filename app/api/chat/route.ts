@@ -11,7 +11,6 @@ const supabase = createClient();
 export async function POST(req: Request) {
   try {
     const { messages, namespace, chatId } = await req.json();
-    console.log('messages', messages);
     const message = messages[messages.length - 1];
 
     await addMessage(supabase, chatId, message.role, message.content[0].text);
@@ -51,7 +50,6 @@ export async function POST(req: Request) {
       options: {
         model: openai('gpt-4o-mini'),
         onFinish: async (response) => {
-          console.log('on finish called, recevied messages', response.messages);
           const messages = response.messages;
           const lastResponseMessage = messages[messages.length - 1];
           if (lastResponseMessage.role === 'assistant') {

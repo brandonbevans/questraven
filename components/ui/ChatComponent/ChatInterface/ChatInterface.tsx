@@ -1,8 +1,9 @@
 'use client';
 
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
-import { FREE_MESSAGE_LIMIT } from '@/components/ui/ChatComponent/helper';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
+import { createClient } from '@/utils/supabase/client';
+import { getMessagesCount } from '@/utils/supabase/queries';
 import { Thread } from '@assistant-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -10,13 +11,44 @@ import { useEffect, useState } from 'react';
 
 export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   const [mounted, setMounted] = useState(false);
+  const [userMessagesCount, setUserMessagesCount] = useState(0);
   const router = useRouter();
-  const { hasSubscription, userMessagesCount, isLoading, runtime, messages } =
-    useChatInterface({ selectedGame });
+  const { hasSubscription, isLoading, runtime, messages } = useChatInterface({
+    selectedGame
+  });
+  const FREE_MESSAGE_LIMIT = parseInt(process.env.FREE_MESSAGE_LIMIT ?? '100');
+  const supabase = createClient();
 
   useEffect(() => {
     setMounted(true);
+    getUserMessagesCount();
   }, []);
+
+  useEffect(() => {
+    const channel = supabase
+      .channel('unique-channel-name')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'messages' },
+        (payload) => {
+          getUserMessagesCount();
+        }
+      )
+      .subscribe();
+
+    // Cleanup to avoid leaks:
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [supabase]);
+
+  const getUserMessagesCount = async () => {
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+    const userMessagesCount = await getMessagesCount(supabase, user?.id ?? '');
+    setUserMessagesCount(userMessagesCount);
+  };
 
   // Prevent hydration issues by not rendering anything on server
   if (!mounted) {

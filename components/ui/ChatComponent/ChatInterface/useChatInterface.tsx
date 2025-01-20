@@ -4,7 +4,6 @@ import {
   createChat,
   getChatByUserAndGame,
   getMessagesByChat,
-  getMessagesCount,
   getSubscription
 } from '@/utils/supabase/queries';
 import { useEdgeRuntime } from '@assistant-ui/react';
@@ -17,10 +16,8 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   const [hasSubscription, setHasSubscription] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isRunning, setIsRunning] = useState(false);
   const [lastMessage, setLastMessage] = useState('');
   const [userchatId, setUserChatId] = useState('');
-  const [userMessagesCount, setUserMessagesCount] = useState(0);
   const supabase = createClient();
 
   useEffect(() => {
@@ -39,7 +36,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     async function checkSubscription() {
       try {
         const data = await getSubscription(supabase);
-        console.log('getSubscription: ', data);
         setHasSubscription(Boolean(data));
       } catch (error) {
         console.error('Error checking subscription:', error);
@@ -47,20 +43,8 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
       }
     }
 
-    async function getUserMessagesCount() {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      const userMessagesCount = await getMessagesCount(
-        supabase,
-        user?.id ?? ''
-      );
-      setUserMessagesCount(userMessagesCount);
-    }
-
     checkSubscription();
-    getUserMessagesCount();
-  }, [supabase]);
+  }, [supabase, messages]);
 
   useEffect(() => {
     const fetchChat = async () => {
@@ -103,7 +87,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     runtime,
     isLoading,
     messages,
-    userMessagesCount,
     hasSubscription,
     lastMessage,
     setLastMessage
