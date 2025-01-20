@@ -1,9 +1,9 @@
 'use client';
 
-import { MyThread as Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { FREE_MESSAGE_LIMIT } from '@/components/ui/ChatComponent/helper';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
+import { Thread } from '@assistant-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
