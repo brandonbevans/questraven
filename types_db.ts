@@ -126,24 +126,24 @@ export type Database = {
       messages: {
         Row: {
           chat_id: string
-          content: string
           created_at: string | null
           id: string
           role: string
+          text: string
         }
         Insert: {
           chat_id: string
-          content: string
           created_at?: string | null
           id?: string
           role: string
+          text: string
         }
         Update: {
           chat_id?: string
-          content?: string
           created_at?: string | null
           id?: string
           role?: string
+          text?: string
         }
         Relationships: [
           {

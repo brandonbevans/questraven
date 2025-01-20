@@ -140,11 +140,11 @@ export const addMessage = cache(
     supabase: SupabaseClient,
     chatId: string,
     role: 'user' | 'assistant',
-    content: string
+    text: string
   ) => {
     const { data, error } = await supabase
       .from('messages')
-      .insert({ chat_id: chatId, role: role, content: content });
+      .insert({ chat_id: chatId, role: role, text: text });
     if (error) {
       throw new Error('Failed to create message');
     }

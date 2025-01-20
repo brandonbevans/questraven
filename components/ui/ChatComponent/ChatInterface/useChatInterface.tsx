@@ -8,7 +8,6 @@ import {
   getSubscription
 } from '@/utils/supabase/queries';
 import { useEdgeRuntime } from '@assistant-ui/react';
-import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
@@ -94,23 +93,8 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
 
   const runtime = useEdgeRuntime({
     api: '/api/chat',
-    // initialMessages: messages.map((message) => ({
-    //   role: message.role as 'assistant' | 'user' | 'system',
-    //   content: [{ type: 'text', text: message.content }],
-    //   id: message.id || nanoid()
-    // })),
-    initialMessages: messages.map((message) => ({
-      role: message.role as 'assistant' | 'user' | 'system',
-      content: [{ type: 'text', text: message.content }],
-      id: message.id || nanoid()
-    })),
     body: {
       namespace: selectedGame.namespace,
-      messages: messages.map((message) => ({
-        role: message.role as 'assistant' | 'user' | 'system',
-        content: message.content,
-        id: message.id || nanoid()
-      })),
       chatId: userchatId
     }
   });

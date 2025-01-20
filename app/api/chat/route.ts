@@ -3,8 +3,6 @@ import { createClient } from '@/utils/supabase/client';
 import { addMessage } from '@/utils/supabase/queries';
 import { openai } from '@ai-sdk/openai';
 import { getEdgeRuntimeResponse } from '@assistant-ui/react/edge';
-import { Message } from 'ai';
-
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
@@ -13,15 +11,12 @@ const supabase = createClient();
 export async function POST(req: Request) {
   try {
     const { messages, namespace, chatId } = await req.json();
-    // Get the last message
     console.log('messages', messages);
-    const lastMessage = messages[messages.length - 1];
-    console.log('lastMessage', lastMessage);
-    // Get the context from the last message
+    const message = messages[messages.length - 1];
 
-    await addMessage(supabase, chatId, lastMessage.role, lastMessage.content);
+    await addMessage(supabase, chatId, message.role, message.content[0].text);
 
-    const context = await getContext(lastMessage.content, namespace);
+    const context = await getContext(message.content[0].text, namespace);
     const prompt = [
       {
         role: 'system',
@@ -49,10 +44,8 @@ export async function POST(req: Request) {
       requestData: {
         messages: [
           ...prompt,
-          ...messages.slice(-6, -1).map((message: Message) => ({
-            role: message.role,
-            content: message.content
-          }))
+          ...messages
+          // .slice(-6, messages.length - 1)
         ]
       },
       options: {
