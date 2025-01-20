@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button2';
+import { Button } from '@/components/ui/button';
 import LogoCloud from '@/components/ui/LogoCloud';
 import type { Tables } from '@/types_db';
 import { getErrorRedirect } from '@/utils/helpers';

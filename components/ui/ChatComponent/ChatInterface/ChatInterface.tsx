@@ -83,6 +83,9 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
           ) : (
             <Thread
               runtime={runtime}
+              welcome={{
+                message: `I know all about ${selectedGame.name}. Speak to the Raven.`
+              }}
               // assistantMessage={{
               //   components: {
               //     Text: (text) => (
@@ -103,9 +106,6 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
               //     )
               //   }
               // }}
-              welcome={{
-                message: `I know all about ${selectedGame.name}. Speak to the Raven.`
-              }}
             />
           )}
         </div>

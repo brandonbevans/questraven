@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button2';
+import { Button } from '@/components/ui/button';
 import Card from '@/components/ui/Card2';
 import { Tables } from '@/types_db';
 import { createStripePortal } from '@/utils/stripe/server';
@@ -56,9 +56,9 @@ export default function CustomerPortalForm({ subscription }: Props) {
         <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
           <p className="pb-4 sm:pb-0">Manage your subscription on Stripe.</p>
           <Button
-            variant="slim"
+            variant="default"
             onClick={handleStripePortalRequest}
-            loading={isSubmitting}
+            disabled={isSubmitting}
           >
             Open customer portal
           </Button>

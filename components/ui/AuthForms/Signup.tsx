@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button2';
+import { Button } from '@/components/ui/button';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { signUp } from '@/utils/auth-helpers/server';
 import Link from 'next/link';
@@ -54,10 +54,10 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
             />
           </div>
           <Button
-            variant="slim"
+            variant="default"
             type="submit"
             className="mt-1"
-            loading={isSubmitting}
+            disabled={isSubmitting}
           >
             Sign up
           </Button>
