@@ -66,14 +66,14 @@ export default async function SignIn(props: any) {
             </p>
           </div>
           <div className="relative aspect-square w-full max-w-md">
-            <Image
+            {/* <Image
               src="/placeholder.svg?height=400&width=400"
               alt="Quest Raven Illustration"
               width={400}
               height={400}
               className="animate-pulse"
               priority
-            />
+            /> */}
           </div>
         </div>
 

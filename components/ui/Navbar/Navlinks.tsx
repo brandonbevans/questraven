@@ -1,11 +1,12 @@
 'use client';
 
-import Logo from '@/components/icons/Logo';
-import { handleRequest } from '@/utils/auth-helpers/client';
-import { SignOut } from '@/utils/auth-helpers/server';
+import Logo2 from '@/components/icons/Logo2';
+import { Button } from '@/components/ui/button';
 import { getRedirectMethod } from '@/utils/auth-helpers/settings';
+import { createClient } from '@/utils/supabase/client';
+import { User } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import s from './Navbar.module.css';
 
 interface NavlinksProps {
@@ -14,29 +15,46 @@ interface NavlinksProps {
 
 export default function Navlinks({ user }: NavlinksProps) {
   const router = getRedirectMethod() === 'client' ? useRouter() : null;
+  const supabase = createClient();
+
+  // Get display name (use email if no full_name)
+  const displayName =
+    user?.user_metadata?.full_name?.split(' ')[0] || user?.email?.split('@')[0];
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.href = '/signin'; // Force a full page refresh
+  };
 
   return (
-    <div className="relative flex flex-row justify-between py-4 align-center md:py-6">
-      <div className="flex items-center flex-1">
-        <Link href="/" className={s.logo} aria-label="Logo">
-          <Logo width={32} height={32} />
-        </Link>
-        <nav className="ml-6 space-x-2 lg:block">
-          {user && (
-            <Link href="/account" className={s.link}>
-              Account
-            </Link>
-          )}
-        </nav>
-      </div>
-      <div className="flex justify-end space-x-8">
+    <div className="relative flex flex-row items-center py-4 md:py-6">
+      <Link href="/bot" className={s.logo} aria-label="Logo">
+        <Logo2 width={128} height={128} />
+      </Link>
+
+      <div className="flex items-center gap-4 ml-auto">
         {user ? (
-          <form onSubmit={(e) => handleRequest(e, SignOut, router)}>
-            <input type="hidden" name="pathName" value={usePathname()} />
-            <button type="submit" className={s.link}>
-              Sign out
-            </button>
-          </form>
+          <>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden sm:inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-100"
+              asChild
+            >
+              <Link href="/account">
+                <User className="w-4 h-4" />
+                {displayName}
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleSignOut}
+              className="text-zinc-400 hover:text-zinc-100"
+            >
+              Sign Out
+            </Button>
+          </>
         ) : (
           <Link href="/signin" className={s.link}>
             Sign In

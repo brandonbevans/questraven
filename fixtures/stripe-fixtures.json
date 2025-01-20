@@ -8,7 +8,7 @@
       "path": "/v1/products",
       "method": "post",
       "params": {
-        "name": "QuestRaven",
+        "name": "Quest Raven",
         "description": "Access to QuestRaven",
         "metadata": {
           "index": 0
@@ -23,7 +23,7 @@
         "product": "${prod_questraven:id}",
         "currency": "usd",
         "billing_scheme": "per_unit",
-        "unit_amount": 1000,
+        "unit_amount": 500,
         "recurring": {
           "interval": "month",
           "interval_count": 1
@@ -38,7 +38,7 @@
         "product": "${prod_questraven:id}",
         "currency": "usd",
         "billing_scheme": "per_unit",
-        "unit_amount": 10000,
+        "unit_amount": 1800,
         "recurring": {
           "interval": "year",
           "interval_count": 1
