@@ -11,20 +11,11 @@ const supabase = createClient();
 export async function POST(req: Request) {
   try {
     const { messages, namespace, chatId } = await req.json();
-    console.log('chatId', chatId);
 
-    // console.log('Incoming Messages:', messages);
     const message = messages[messages.length - 1];
-    console.log('message', message);
-    console.log('namespace', namespace);
-    console.log('chatId', chatId);
-    console.log('messages', messages);
-    console.log('message.content[0].text', message.content[0].text);
 
     await addMessage(supabase, chatId, message.role, message.content[0].text);
-    console.log('namespace', namespace);
     const context = await getContext(message.content[0].text, namespace);
-    console.log('Context:', context);
     const prompt = [
       {
         role: 'system',

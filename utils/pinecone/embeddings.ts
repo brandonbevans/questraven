@@ -6,7 +6,6 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 export async function getEmbeddings(input: string) {
-  console.log('input', input);
   try {
     const response = await openai.createEmbedding({
       model: 'text-embedding-3-small',
