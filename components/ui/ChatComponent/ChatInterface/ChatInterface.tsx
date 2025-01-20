@@ -5,11 +5,12 @@ import { FREE_MESSAGE_LIMIT } from '@/components/ui/ChatComponent/helper';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { Thread } from '@assistant-ui/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   const [mounted, setMounted] = useState(false);
-
+  const router = useRouter();
   const { hasSubscription, userMessagesCount, isLoading, runtime } =
     useChatInterface({ selectedGame });
 
@@ -41,7 +42,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
                 <button
                   className="ml-2 text-blue-500 hover:text-blue-400 underline"
                   onClick={() => {
-                    /* Add upgrade flow later */
+                    router.push('/subscribe');
                   }}
                 >
                   Upgrade now
