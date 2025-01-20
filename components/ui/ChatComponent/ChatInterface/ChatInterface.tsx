@@ -1,9 +1,9 @@
 'use client';
 
+import { MyThread as Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { FREE_MESSAGE_LIMIT } from '@/components/ui/ChatComponent/helper';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
-import { Thread } from '@assistant-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -83,6 +83,9 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
           ) : (
             <Thread
               runtime={runtime}
+              welcome={{
+                message: `I know all about ${selectedGame.name}. Speak to the Raven.`
+              }}
               // assistantMessage={{
               //   components: {
               //     Text: (text) => (
@@ -103,9 +106,6 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
               //     )
               //   }
               // }}
-              welcome={{
-                message: `I know all about ${selectedGame.name}. Speak to the Raven.`
-              }}
             />
           )}
         </div>

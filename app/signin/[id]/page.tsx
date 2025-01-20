@@ -65,14 +65,16 @@ export default async function SignIn(props: any) {
             </p>
           </div>
           <div className="relative aspect-square w-full max-w-md">
-            <Logo width="400px" height="400px" />
+            <Logo width={400} height={400} />
           </div>
         </div>
 
         {/* right side */}
         <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 bg-foreground">
           <div className="w-full max-w-md space-y-8 rounded-xl bg-zinc-900 p-8">
-            <Logo width="64px" height="64px" />
+            <div className="flex items-center justify-center gap-2">
+              <Logo width={64} height={64} />
+            </div>
             <Card
               title={
                 viewProp === 'forgot_password'
