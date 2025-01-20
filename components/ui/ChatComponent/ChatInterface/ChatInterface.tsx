@@ -38,12 +38,14 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     <div className="flex h-[calc(100vh-theme(space.16))] flex-col px-4">
       <div className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 shadow-xl flex flex-col overflow-hidden">
         {!hasSubscription && (
-          <div className="shrink-0 px-4 pt-4 text-sm text-zinc-400">
+          <div className="shrink-0 px-4 pt-4 text-sm border-b border-zinc-800 bg-zinc-900/50">
             {isLimitReached ? (
-              <div className="text-red-400">
-                You&apos;ve reached your free message limit.
+              <div className="pb-4 flex items-center justify-between">
+                <span className="text-red-400">
+                  You&apos;ve reached your free message limit.
+                </span>
                 <button
-                  className="ml-2 text-blue-500 hover:text-blue-400 underline"
+                  className="ml-2 px-4 py-1 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
                   onClick={() => {
                     router.push('/subscribe');
                   }}
@@ -52,12 +54,14 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
                 </button>
               </div>
             ) : (
-              <div>
-                Free tier: {FREE_MESSAGE_LIMIT - userMessagesCount} message
-                {FREE_MESSAGE_LIMIT - userMessagesCount !== 1 ? 's' : ''}{' '}
-                remaining.
+              <div className="pb-4 flex items-center justify-between">
+                <span className="text-zinc-400">
+                  Free tier: {FREE_MESSAGE_LIMIT - userMessagesCount} message
+                  {FREE_MESSAGE_LIMIT - userMessagesCount !== 1 ? 's' : ''}{' '}
+                  remaining
+                </span>
                 <button
-                  className="ml-2 text-blue-500 hover:text-blue-400 underline"
+                  className="ml-2 px-4 py-1 text-sm bg-zinc-800 hover:bg-zinc-700 text-zinc-100 rounded-md transition-colors"
                   onClick={() => {
                     router.push('/subscribe');
                   }}
@@ -68,7 +72,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
             )}
           </div>
         )}
-        <div className="flex flex-col h-full overflow-y-auto mt-2">
+        <div className="flex flex-col h-full overflow-y-auto">
           {isLoading ? (
             <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
               {selectedGame.logo_url && (
@@ -85,9 +89,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
             </div>
           ) : (
             <div
-              className={`flex-1 ${
-                isLimitReached ? 'pointer-events-none opacity-50' : ''
-              }`}
+              className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
             >
               <Thread
                 runtime={runtime}

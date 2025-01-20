@@ -8,19 +8,22 @@ import {
   getSubscription
 } from '@/utils/supabase/queries';
 import { useEdgeRuntime } from '@assistant-ui/react';
+import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
+
 type Game = Tables<'games'>;
 type Message = Tables<'messages'>;
 
 export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   const [hasSubscription, setHasSubscription] = useState(false);
-  const [isRunning, setIsRunning] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRunning, setIsRunning] = useState(false);
   const [lastMessage, setLastMessage] = useState('');
   const [userchatId, setUserChatId] = useState('');
   const [userMessagesCount, setUserMessagesCount] = useState(0);
   const supabase = createClient();
+
   useEffect(() => {
     const {
       data: { subscription }
@@ -63,7 +66,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   useEffect(() => {
     const fetchChat = async () => {
       setIsLoading(true);
-      setMessages([]);
       try {
         const {
           data: { user }
@@ -76,7 +78,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
         if (!chat) {
           chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
         } else {
-          // You can do something with chat here if needed (e.g., setState)
           const userMessages = await getMessagesByChat(supabase, chat.id);
           setMessages(userMessages);
         }
@@ -89,18 +90,41 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     };
 
     fetchChat();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGame, supabase]);
+
+  const onNew = async (m: any) => {
+    if (m.content[0]?.type !== 'text')
+      throw new Error('Only text messages are supported');
+
+    const input = m.content[0].text;
+    setMessages((currentMessages) => [
+      ...currentMessages,
+      { role: 'user', content: input, id: m.id || nanoid() } as Message
+    ]);
+
+    try {
+      setIsRunning(true);
+      // Handle the API call and response here
+      // Add your API call logic
+    } finally {
+      setIsRunning(false);
+    }
+  };
 
   const runtime = useEdgeRuntime({
     api: '/api/chat',
-    initialMessages: messages.map((message) => ({
-      role: message.role as 'assistant' | 'user' | 'system',
-      content: message.content,
-      id: message.id
-    })),
+    // initialMessages: messages.map((message) => ({
+    //   role: message.role as 'assistant' | 'user' | 'system',
+    //   content: [{ type: 'text', text: message.content }],
+    //   id: message.id || nanoid()
+    // })),
     body: {
-      namespace: selectedGame.namespace
+      namespace: selectedGame.namespace,
+      messages: messages.map((message) => ({
+        role: message.role as 'assistant' | 'user' | 'system',
+        content: [{ type: 'text', text: message.content }],
+        id: message.id || nanoid()
+      }))
     }
   });
 
