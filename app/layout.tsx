@@ -1,12 +1,11 @@
-import Footer from '@/components/ui/Footer';
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
+import '@/styles/globals.css';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata, Viewport } from 'next';
 import Head from 'next/head';
 import Script from 'next/script';
 import { PropsWithChildren, Suspense } from 'react';
-import 'styles/main.css';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -120,7 +119,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             </Script>
           )}
         </main>
-        <Footer />
+        {/* <Footer /> */}
         <Suspense>
           <Toaster />
         </Suspense>

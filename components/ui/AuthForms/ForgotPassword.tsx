@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button2';
+import { Button } from '@/components/ui/button';
 import { handleRequest } from '@/utils/auth-helpers/client';
 import { requestPasswordUpdate } from '@/utils/auth-helpers/server';
 import Link from 'next/link';
@@ -50,11 +50,10 @@ export default function ForgotPassword({
             />
           </div>
           <Button
-            variant="slim"
+            variant="default"
             type="submit"
             className="mt-1"
-            loading={isSubmitting}
-            disabled={disableButton}
+            disabled={isSubmitting}
           >
             Send Email
           </Button>
