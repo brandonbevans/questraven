@@ -135,7 +135,7 @@ export const getMessagesCount = cache(
   }
 );
 
-export const createMessage = cache(
+export const addMessage = cache(
   async (
     supabase: SupabaseClient,
     chatId: string,

@@ -92,25 +92,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     fetchChat();
   }, [selectedGame, supabase]);
 
-  const onNew = async (m: any) => {
-    if (m.content[0]?.type !== 'text')
-      throw new Error('Only text messages are supported');
-
-    const input = m.content[0].text;
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      { role: 'user', content: input, id: m.id || nanoid() } as Message
-    ]);
-
-    try {
-      setIsRunning(true);
-      // Handle the API call and response here
-      // Add your API call logic
-    } finally {
-      setIsRunning(false);
-    }
-  };
-
   const runtime = useEdgeRuntime({
     api: '/api/chat',
     // initialMessages: messages.map((message) => ({
@@ -118,13 +99,19 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     //   content: [{ type: 'text', text: message.content }],
     //   id: message.id || nanoid()
     // })),
+    initialMessages: messages.map((message) => ({
+      role: message.role as 'assistant' | 'user' | 'system',
+      content: [{ type: 'text', text: message.content }],
+      id: message.id || nanoid()
+    })),
     body: {
       namespace: selectedGame.namespace,
       messages: messages.map((message) => ({
         role: message.role as 'assistant' | 'user' | 'system',
-        content: [{ type: 'text', text: message.content }],
+        content: message.content,
         id: message.id || nanoid()
-      }))
+      })),
+      chatId: userchatId
     }
   });
 
