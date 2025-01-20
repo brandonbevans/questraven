@@ -17,7 +17,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [lastMessage, setLastMessage] = useState('');
-  const [userchatId, setUserChatId] = useState('');
+  const [userChatId, setUserChatId] = useState('');
   const supabase = createClient();
 
   useEffect(() => {
@@ -47,39 +47,46 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   }, [supabase, messages]);
 
   useEffect(() => {
-    const fetchChat = async () => {
+    async function fetchChat() {
       setIsLoading(true);
       try {
         const {
           data: { user }
         } = await supabase.auth.getUser();
+
         let chat = await getChatByUserAndGame(
           supabase,
           user?.id ?? '',
           selectedGame.id
         );
+
         if (!chat) {
           chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
         } else {
           const userMessages = await getMessagesByChat(supabase, chat.id);
           setMessages(userMessages);
         }
+
         setUserChatId(chat.id);
       } catch (error) {
         console.log('Error fetching chat:', error);
       } finally {
         setIsLoading(false);
       }
-    };
+    }
 
     fetchChat();
   }, [selectedGame, supabase]);
 
   const runtime = useEdgeRuntime({
     api: '/api/chat',
+    initialMessages: messages.map((message) => ({
+      role: message.role as 'user' | 'assistant' | 'system',
+      content: message.text
+    })),
     body: {
       namespace: selectedGame.namespace,
-      chatId: userchatId
+      chatId: userChatId
     }
   });
 

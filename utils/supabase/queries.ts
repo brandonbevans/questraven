@@ -72,7 +72,6 @@ export const createChat = cache(
         user_id: userId,
         game_id: gameId
       })
-      .select()
       .single();
     if (error) {
       throw new Error('Failed to create chat');

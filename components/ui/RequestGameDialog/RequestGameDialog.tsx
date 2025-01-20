@@ -30,7 +30,6 @@ export default function RequestGameDialog({
   const supabase = createClient();
 
   const handleSubmit = async () => {
-    console.log('Submitting game request...');
     if (!gameName.trim()) return;
 
     setIsSubmitting(true);
@@ -43,7 +42,6 @@ export default function RequestGameDialog({
         content: `${gameName}`,
         type: 'GAME_REQUEST'
       });
-      console.log(response);
 
       setGameName('');
       onOpenChange(false);
