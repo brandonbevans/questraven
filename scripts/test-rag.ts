@@ -12,7 +12,8 @@ const testQuery = async () => {
   };
 
   const gameName = process.argv[2] || 'eldenring';
-
+  console.log('pinecone api key', process.env.PINECONE_API_KEY);
+  console.log('openai api key', process.env.OPENAI_API_KEY);
   console.log(`Testing context for game: ${gameName}`);
   console.log(`Query: ${testMessage.text}`);
 

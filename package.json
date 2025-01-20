@@ -6,7 +6,7 @@
     "start": "next start",
     "lint": "next lint",
     "prettier-fix": "prettier --write .",
-    "test-rag": "ts-node --compilerOptions '{\"module\":\"commonjs\"}' -r tsconfig-paths/register scripts/test-rag.ts",
+    "test-rag": "ts-node --compilerOptions '{\"module\":\"commonjs\"}' -r tsconfig-paths/register -r dotenv/config scripts/test-rag.ts dotenv_config_path=.env.local",
     "stripe:login": "stripe login",
     "stripe:listen": "stripe listen --forward-to=localhost:3000/api/webhooks",
     "stripe:fixtures": "stripe fixtures fixtures/stripe-fixtures.json",
