@@ -25,8 +25,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
       data: { subscription }
     } = supabase.auth.onAuthStateChange((event, session) => {
       // Handle session changes here
-      console.log('Auth event:', event);
-      console.log('Session:', session);
     });
     // Cleanup subscription on unmount
     return () => subscription.unsubscribe();
@@ -47,7 +45,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   }, [supabase, messages]);
 
   useEffect(() => {
-    console.log('getting chat ID..', selectedGame);
     async function fetchChat() {
       setIsLoading(true);
       try {
@@ -77,7 +74,6 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     }
 
     fetchChat();
-    console.log('userChatId:', userChatId);
   }, [selectedGame, supabase]);
 
   const runtime = useEdgeRuntime({
