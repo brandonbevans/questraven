@@ -6,7 +6,7 @@ import PasswordSignIn from '@/components/ui/AuthForms/PasswordSignIn';
 import Separator from '@/components/ui/AuthForms/Separator';
 import SignUp from '@/components/ui/AuthForms/Signup';
 import UpdatePassword from '@/components/ui/AuthForms/UpdatePassword';
-import { Card } from '@/components/ui/card';
+import Card from '@/components/ui/Card2';
 import {
   getAuthTypes,
   getDefaultSignInView,
@@ -18,7 +18,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 export default async function SignIn(props: any) {
-  const { params, searchParams } = props;
+  const { params, searchParams } = await props;
 
   const { allowOauth, allowEmail, allowPassword } = getAuthTypes();
   const viewTypes = getViewTypes();

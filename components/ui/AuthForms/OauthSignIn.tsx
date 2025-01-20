@@ -39,12 +39,12 @@ export default function OauthSignIn() {
         >
           <input type="hidden" name="provider" value={provider.name} />
           <Button
-            variant="outline"
+            variant="default"
             type="submit"
             className="w-full"
             // loading={isSubmitting}
           >
-            <span className="mr-2">{provider.icon}</span>
+            <span className="mt-1">{provider.icon}</span>
             <span>{provider.displayName}</span>
           </Button>
         </form>
