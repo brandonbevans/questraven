@@ -47,6 +47,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   }, [supabase, messages]);
 
   useEffect(() => {
+    console.log('getting chat ID..', selectedGame);
     async function fetchChat() {
       setIsLoading(true);
       try {
@@ -76,6 +77,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     }
 
     fetchChat();
+    console.log('userChatId:', userChatId);
   }, [selectedGame, supabase]);
 
   const runtime = useEdgeRuntime({

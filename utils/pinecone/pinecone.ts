@@ -8,6 +8,7 @@ export type Metadata = {
   text: string;
   chunk: string;
   hash: string;
+  _node_content: string;
 };
 
 // The function `getMatchesFromEmbeddings` is used to retrieve matches for the given embeddings
