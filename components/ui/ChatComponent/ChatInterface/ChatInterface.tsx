@@ -4,7 +4,7 @@ import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/us
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { createClient } from '@/utils/supabase/client';
 import { getMessagesCount } from '@/utils/supabase/queries';
-import { Thread } from '@assistant-ui/react';
+import { AssistantRuntimeProvider, Thread } from '@assistant-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -23,6 +23,11 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     setMounted(true);
     getUserMessagesCount();
   }, []);
+
+  useEffect(() => {
+    console.log('runtime: ', runtime.threadList.getState().threads);
+    runtime.switchToNewThread();
+  }, [selectedGame]);
 
   useEffect(() => {
     const channel = supabase
@@ -104,34 +109,35 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
             )}
           </div>
         )}
-        <div className="flex flex-col h-full overflow-y-auto">
-          {isLoading ? (
-            <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
-              {selectedGame.logo_url && (
-                <Image
-                  src={selectedGame.logo_url}
-                  alt={`${selectedGame.name} Logo`}
-                  width={50}
-                  height={50}
-                />
-              )}
-              <div className="text-lg text-zinc-600 mt-2">
-                Loading {selectedGame.name}
+        <AssistantRuntimeProvider runtime={runtime}>
+          <div className="flex flex-col h-full overflow-y-auto">
+            {isLoading ? (
+              <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
+                {selectedGame.logo_url && (
+                  <Image
+                    src={selectedGame.logo_url}
+                    alt={`${selectedGame.name} Logo`}
+                    width={50}
+                    height={50}
+                  />
+                )}
+                <div className="text-lg text-zinc-600 mt-2">
+                  Loading {selectedGame.name}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div
-              className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
-            >
-              <Thread
-                runtime={runtime}
-                welcome={{
-                  message: `I know all about ${selectedGame.name}. Speak to the Raven.`
-                }}
-              />
-            </div>
-          )}
-        </div>
+            ) : (
+              <div
+                className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
+              >
+                <Thread
+                  welcome={{
+                    message: `I know all about ${selectedGame.name}. Speak to the Raven.`
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        </AssistantRuntimeProvider>
       </div>
     </div>
   );
