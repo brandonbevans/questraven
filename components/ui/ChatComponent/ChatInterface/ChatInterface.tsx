@@ -18,6 +18,9 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   });
   const FREE_MESSAGE_LIMIT = parseInt(process.env.FREE_MESSAGE_LIMIT ?? '100');
   const supabase = createClient();
+  const [nameToThreadIdMap, setNameToThreadIdMap] = useState<
+    Map<string, string>
+  >(new Map());
 
   useEffect(() => {
     setMounted(true);
@@ -25,8 +28,19 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   }, []);
 
   useEffect(() => {
-    console.log('runtime: ', runtime.threadList.getState().threads);
-    runtime.switchToNewThread();
+    const threadId = nameToThreadIdMap.get(selectedGame.namespace);
+    if (threadId) {
+      runtime.threadList.getItemById(threadId).switchTo();
+    } else {
+      setNameToThreadIdMap(
+        new Map([
+          ...Array.from(nameToThreadIdMap.entries()),
+          [selectedGame.namespace, runtime.threadList.mainItem.getState().id]
+        ])
+      );
+      runtime.switchToNewThread();
+    }
+    console.log(nameToThreadIdMap);
   }, [selectedGame]);
 
   useEffect(() => {
