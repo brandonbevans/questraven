@@ -28,19 +28,28 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   }, []);
 
   useEffect(() => {
-    const threadId = nameToThreadIdMap.get(selectedGame.namespace);
-    if (threadId) {
-      runtime.threadList.getItemById(threadId).switchTo();
-    } else {
+    const currentThreadId = runtime.threadList.getState().mainThreadId;
+    if (!Array.from(nameToThreadIdMap.values()).includes(currentThreadId)) {
       setNameToThreadIdMap(
         new Map([
           ...Array.from(nameToThreadIdMap.entries()),
-          [selectedGame.namespace, runtime.threadList.mainItem.getState().id]
+          [selectedGame.namespace, currentThreadId]
         ])
       );
+    }
+
+    // if Thread exists
+    if (nameToThreadIdMap.has(selectedGame.namespace)) {
+      const threadId = nameToThreadIdMap.get(selectedGame.namespace);
+      if (threadId) {
+        runtime.threadList.getItemById(threadId).switchTo();
+      } else {
+        console.log('threadId not found, serious error');
+      }
+      // doesnt exist
+    } else {
       runtime.switchToNewThread();
     }
-    console.log(nameToThreadIdMap);
   }, [selectedGame]);
 
   useEffect(() => {
