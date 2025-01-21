@@ -37,7 +37,7 @@ export async function POST(req: Request) {
       ${context}
       END OF CONTEXT BLOCK
       AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
-      If the context does not provide the answer to question, the AI assistant will give an answer, but finish with something like, "I don't have 100% conviction on this".
+      If the context does not provide the answer to question, the AI assistant will say "Hmm. I'm not sure.".
       AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
       AI assistant will not invent anything that is not drawn directly from the context.`
           }
@@ -54,7 +54,7 @@ export async function POST(req: Request) {
         ]
       },
       options: {
-        model: openai('gpt-4o-mini'),
+        model: openai(`${process.env.OPENAI_MODEL || 'gpt-4o-mini'}`),
         onFinish: async (response) => {
           const messages = response.messages;
           const lastResponseMessage = messages[messages.length - 1];
