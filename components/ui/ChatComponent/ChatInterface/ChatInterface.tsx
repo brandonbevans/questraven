@@ -4,7 +4,12 @@ import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/us
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { createClient } from '@/utils/supabase/client';
 import { getMessagesCount } from '@/utils/supabase/queries';
-import { AssistantRuntimeProvider, Thread } from '@assistant-ui/react';
+import {
+  AssistantRuntimeProvider,
+  MessageStatus,
+  Thread,
+  ThreadMessage
+} from '@assistant-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -38,6 +43,32 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     } else {
       runtime.switchToNewThread();
       const currentThreadId = runtime.threadList.getState().mainThreadId;
+      const repository = {
+        messages: messages.map((message) => ({
+          message: {
+            role: message.role as 'user' | 'assistant' | 'system',
+            content: [
+              {
+                type: 'text',
+                text: message.text
+              }
+            ],
+            metadata: {
+              unstable_data: [],
+              custom: {}
+            },
+            id: message.id,
+            createdAt: new Date(message.created_at ?? ''),
+            status: {
+              type: 'complete',
+              reason: 'stop'
+            } as MessageStatus
+          } as ThreadMessage,
+          parentId: null
+        }))
+      };
+      runtime.thread.import(repository);
+
       setNameToThreadIdMap(
         new Map([
           ...Array.from(nameToThreadIdMap.entries()),

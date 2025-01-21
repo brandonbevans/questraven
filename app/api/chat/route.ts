@@ -44,7 +44,7 @@ export async function POST(req: Request) {
         messages: [
           ...prompt,
           ...messages
-          // .slice(-6, messages.length - 1)
+          // .slice(-6, messages.length - 1) //TODO come back and only include last 5 messages
         ]
       },
       options: {

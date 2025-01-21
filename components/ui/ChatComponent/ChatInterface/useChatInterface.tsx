@@ -94,6 +94,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     messages,
     hasSubscription,
     lastMessage,
-    setLastMessage
+    setLastMessage,
+    userChatId
   };
 }
