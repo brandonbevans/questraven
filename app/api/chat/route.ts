@@ -1,13 +1,19 @@
 import { getContext } from '@/utils/pinecone/context';
 import { createClient } from '@/utils/supabase/client';
 import { addMessage } from '@/utils/supabase/queries';
-import { openai } from '@ai-sdk/openai';
+import { createOpenAI } from '@ai-sdk/openai';
 import { getEdgeRuntimeResponse } from '@assistant-ui/react/edge';
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
 const supabase = createClient();
-
+const openai = createOpenAI({
+  baseURL: 'https://oai.helicone.ai/v1',
+  headers: {
+    'Helicone-Auth': `Bearer ${process.env.HELICONE_API_KEY}`,
+    'helicone-stream-usage': 'true'
+  }
+});
 export async function POST(req: Request) {
   try {
     const { messages, namespace, chatId } = await req.json();
@@ -44,7 +50,7 @@ export async function POST(req: Request) {
         messages: [
           ...prompt,
           ...messages
-          // .slice(-6, messages.length - 1)
+          // .slice(-6, messages.length - 1) //TODO come back and only include last 5 messages
         ]
       },
       options: {
