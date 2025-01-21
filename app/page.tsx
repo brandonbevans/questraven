@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
+import { SparklesCore } from '../components/ui/sparkles';
 
 import { Metadata } from 'next';
 
@@ -59,8 +60,20 @@ export const metadata: Metadata = {
 export default function LandingPage() {
   return (
     <div className="min-h-screen w-full bg-zinc-950 text-white">
+      <div className="w-full absolute inset-0 h-screen">
+        <SparklesCore
+          id="tsparticlescolorful"
+          background="transparent"
+          minSize={0.6}
+          maxSize={1.4}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#FFFFFF"
+          speed={0.5}
+        />
+      </div>
       {/* Hero Section */}
-      <section className="relative mx-auto max-w-6xl px-4 pt-24 text-center">
+      <section className="relative mx-auto min-h-screen max-w-6xl px-4 pt-24 text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
           First Ever AI-Powered Game Guide
         </h1>
