@@ -18,9 +18,10 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   const [mounted, setMounted] = useState(false);
   const [userMessagesCount, setUserMessagesCount] = useState(0);
   const router = useRouter();
-  const { hasSubscription, isLoading, runtime, messages } = useChatInterface({
-    selectedGame
-  });
+  const { hasSubscription, isLoading, runtime, messages, userChatId } =
+    useChatInterface({
+      selectedGame
+    });
   const FREE_MESSAGE_LIMIT = parseInt(process.env.FREE_MESSAGE_LIMIT ?? '100');
   const supabase = createClient();
   const [nameToThreadIdMap, setNameToThreadIdMap] = useState<
@@ -32,19 +33,11 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     getUserMessagesCount();
   }, []);
 
-  useEffect(() => {
-    if (nameToThreadIdMap.has(selectedGame.namespace)) {
-      const threadId = nameToThreadIdMap.get(selectedGame.namespace);
-      if (threadId) {
-        runtime.threadList.getItemById(threadId).switchTo();
-      } else {
-        console.log('threadId not found, serious error');
-      }
-    } else {
-      runtime.switchToNewThread();
-      const currentThreadId = runtime.threadList.getState().mainThreadId;
-      const repository = {
-        messages: messages.map((message) => ({
+  const buildRepository = () => {
+    const repository = {
+      messages: messages
+        .filter((message) => message.chat_id === userChatId)
+        .map((message) => ({
           message: {
             role: message.role as 'user' | 'assistant' | 'system',
             content: [
@@ -66,8 +59,24 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
           } as ThreadMessage,
           parentId: null
         }))
-      };
-      runtime.thread.import(repository);
+    };
+    return repository;
+  };
+
+  useEffect(() => {
+    if (nameToThreadIdMap.has(selectedGame.namespace)) {
+      const threadId = nameToThreadIdMap.get(selectedGame.namespace);
+      if (threadId) {
+        runtime.threadList.getItemById(threadId).switchTo();
+      } else {
+        console.log('threadId not found, serious error');
+      }
+    } else {
+      runtime.switchToNewThread();
+      const currentThreadId = runtime.threadList.getState().mainThreadId;
+
+      // TODO: fix this
+      // runtime.thread.import(buildRepository());
 
       setNameToThreadIdMap(
         new Map([
