@@ -1,5 +1,6 @@
 'use client';
 
+import { MarkdownText } from '@/components/assistant-ui/markdown-text';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { createClient } from '@/utils/supabase/client';
@@ -188,6 +189,11 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
                 className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
               >
                 <Thread
+                  assistantMessage={{
+                    components: {
+                      Text: MarkdownText
+                    }
+                  }}
                   welcome={{
                     message: `I know all about ${selectedGame.name}. Speak to the Raven.`
                   }}
