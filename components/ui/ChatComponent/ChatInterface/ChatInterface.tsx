@@ -23,7 +23,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     useChatInterface({
       selectedGame
     });
-  const FREE_MESSAGE_LIMIT = parseInt(process.env.FREE_MESSAGE_LIMIT ?? '100');
+  const FREE_MESSAGE_LIMIT = parseInt(process.env.FREE_MESSAGE_LIMIT ?? '5');
   const supabase = createClient();
   const [nameToThreadIdMap, setNameToThreadIdMap] = useState<
     Map<string, string>
