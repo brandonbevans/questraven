@@ -2,6 +2,7 @@ import botScreenshot from '@/public/botscreenshot.png';
 import { Brain, Check, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { SparklesCore } from '../components/ui/sparkles';
@@ -57,7 +58,7 @@ export const metadata: Metadata = {
   }
 };
 
-export default function LandingPage() {
+function LandingPageContent() {
   return (
     <div className="min-h-screen w-full bg-zinc-950 text-white">
       <div className="w-full absolute inset-0 h-screen">
@@ -198,5 +199,13 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <Suspense>
+      <LandingPageContent />
+    </Suspense>
   );
 }

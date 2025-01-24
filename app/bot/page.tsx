@@ -7,11 +7,11 @@ import { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { getGames } from '@/utils/supabase/queries';
 import { ChevronRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
 
-export default function Bot() {
+function BotContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<Game | undefined>();
   const [isLoading, setIsLoading] = useState(true);
@@ -74,5 +74,13 @@ export default function Bot() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Bot() {
+  return (
+    <Suspense>
+      <BotContent />
+    </Suspense>
   );
 }

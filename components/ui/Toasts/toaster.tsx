@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/Toasts/toast';
 import { useToast } from '@/components/ui/Toasts/use-toast';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
-export function Toaster() {
+function ToasterContent() {
   const { toast, toasts } = useToast();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -65,5 +65,13 @@ export function Toaster() {
       })}
       <ToastViewport />
     </ToastProvider>
+  );
+}
+
+export function Toaster() {
+  return (
+    <Suspense>
+      <ToasterContent />
+    </Suspense>
   );
 }
