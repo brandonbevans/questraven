@@ -44,12 +44,12 @@ export default function Sidebar({
 
   if (isLoading) {
     return (
-      <Card className="w-64 h-full p-4 bg-zinc-900 border-zinc-800">
+      <Card className="w-64 h-full p-4 bg-zinc-950 border-zinc-800">
         <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-zinc-800 rounded w-1/2"></div>
+          <div className="h-6 bg-zinc-900 rounded w-1/2"></div>
           <div className="space-y-2">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-zinc-800 rounded"></div>
+              <div key={i} className="h-16 bg-zinc-900 rounded"></div>
             ))}
           </div>
         </div>
@@ -59,8 +59,8 @@ export default function Sidebar({
 
   if (error) {
     return (
-      <Card className="w-64 h-full p-4 bg-zinc-900 border-zinc-800">
-        <div className="text-red-500">{error}</div>
+      <Card className="w-64 h-full p-4 bg-zinc-950 border-zinc-800">
+        <div className="text-red-400">{error}</div>
       </Card>
     );
   }
@@ -72,7 +72,7 @@ export default function Sidebar({
           <div className="space-y-1">
             <Link
               href="/"
-              className="w-full flex items-center gap-3 p-2 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-white"
+              className="w-full flex items-center gap-3 p-2 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50"
             >
               <Home className="h-5 w-5" />
               <span className="font-medium">Home</span>
@@ -80,7 +80,7 @@ export default function Sidebar({
 
             <button
               onClick={() => setShowImprovementDialog(true)}
-              className="w-full flex items-center gap-3 p-2 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-white"
+              className="w-full flex items-center gap-3 p-2 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50"
             >
               <MessageSquarePlus className="h-5 w-5" />
               <span className="font-medium">Submit Improvement</span>
@@ -91,7 +91,7 @@ export default function Sidebar({
             variant="ghost"
             size="icon"
             onClick={() => setIsOpen(false)}
-            className="text-zinc-400 hover:text-white"
+            className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
             aria-label="Close Sidebar"
           >
             <ChevronLeft className="h-5 w-5" />
@@ -99,7 +99,7 @@ export default function Sidebar({
         </div>
 
         <div className="space-y-4 mt-4">
-          <h2 className="text-xl font-bold text-white px-2">Games</h2>
+          <h2 className="text-xl font-bold text-zinc-50 px-2">Games</h2>
           <div className="space-y-2 overflow-y-auto">
             {games.map((game) => (
               <button
@@ -107,8 +107,8 @@ export default function Sidebar({
                 onClick={() => onGameSelect(game)}
                 className={`w-full flex items-center gap-3 p-2 rounded-lg transition-colors ${
                   selectedGame?.namespace === game.namespace
-                    ? 'bg-blue-500 text-white'
-                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'
+                    ? 'bg-blue-600 text-zinc-50'
+                    : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50'
                 }`}
               >
                 <Image
@@ -120,7 +120,7 @@ export default function Sidebar({
                 />
                 <div className="text-left">
                   <div className="font-medium">{game.name}</div>
-                  <div className="text-xs opacity-75 line-clamp-1">
+                  <div className="text-xs text-zinc-500 line-clamp-1">
                     {game.description}
                   </div>
                 </div>
@@ -129,12 +129,12 @@ export default function Sidebar({
 
             <button
               onClick={() => setShowGameRequestDialog(true)}
-              className="w-full flex items-center gap-3 p-2 mt-8 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-white border-t border-zinc-800 pt-8"
+              className="w-full flex items-center gap-3 p-2 mt-8 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50 border-t border-zinc-800 pt-8"
             >
               <PlusCircle className="h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Request a Game</div>
-                <div className="text-xs opacity-75">
+                <div className="text-xs text-zinc-500">
                   Not seeing your game? Request to add it here!
                 </div>
               </div>

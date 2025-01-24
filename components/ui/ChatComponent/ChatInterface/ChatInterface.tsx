@@ -1,6 +1,6 @@
 'use client';
 
-import { MarkdownText } from '@/components/assistant-ui/markdown-text';
+import { Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { createClient } from '@/utils/supabase/client';
@@ -8,7 +8,6 @@ import { getMessagesCount } from '@/utils/supabase/queries';
 import {
   AssistantRuntimeProvider,
   MessageStatus,
-  Thread,
   ThreadMessage
 } from '@assistant-ui/react';
 import Image from 'next/image';
@@ -188,16 +187,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
               <div
                 className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
               >
-                <Thread
-                  assistantMessage={{
-                    components: {
-                      Text: MarkdownText
-                    }
-                  }}
-                  welcome={{
-                    message: `I know all about ${selectedGame.name}. Speak to the Raven.`
-                  }}
-                />
+                <Thread />
               </div>
             )}
           </div>

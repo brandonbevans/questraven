@@ -1,60 +1,59 @@
-"use client";
+'use client';
 
 import {
   ComposerPrimitive,
   MessagePrimitive,
-  ThreadPrimitive,
-} from "@assistant-ui/react";
-import type { FC } from "react";
-import { SendHorizontalIcon } from "lucide-react";
+  ThreadPrimitive
+} from '@assistant-ui/react';
+import { SendHorizontalIcon } from 'lucide-react';
+import type { FC } from 'react';
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { TooltipIconButton } from "@/components/assistant-ui/tooltip-icon-button";
+import { TooltipIconButton } from '@/components/assistant-ui/tooltip-icon-button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
-export const MyThread: FC = () => {
+export const Thread: FC = () => {
   return (
-    <ThreadPrimitive.Root className="bg-white h-full dark:bg-zinc-950">
+    <ThreadPrimitive.Root className="bg-zinc-950 h-full">
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
-        <MyThreadWelcome />
-
+        <ThreadWelcome />
         <ThreadPrimitive.Messages
           components={{
-            UserMessage: MyUserMessage,
-            AssistantMessage: MyAssistantMessage,
+            UserMessage: UserMessage,
+            AssistantMessage: AssistantMessage
           }}
         />
 
         <div className="min-h-8 flex-grow" />
 
         <div className="sticky bottom-0 mt-3 flex w-full max-w-2xl flex-col items-center justify-end rounded-t-lg bg-inherit pb-4">
-          <MyComposer />
+          <Composer />
         </div>
       </ThreadPrimitive.Viewport>
     </ThreadPrimitive.Root>
   );
 };
 
-const MyThreadWelcome: FC = () => {
+const ThreadWelcome: FC = () => {
   return (
     <ThreadPrimitive.Empty>
       <div className="flex flex-grow flex-col items-center justify-center">
-        <Avatar>
-          <AvatarFallback>C</AvatarFallback>
+        <Avatar className="bg-zinc-800">
+          <AvatarFallback className="text-zinc-100">C</AvatarFallback>
         </Avatar>
-        <p className="mt-4 font-medium">How can I help you today?</p>
+        <p className="mt-4 font-medium text-zinc-100">Speak to the Raven.</p>
       </div>
     </ThreadPrimitive.Empty>
   );
 };
 
-const MyComposer: FC = () => {
+const Composer: FC = () => {
   return (
-    <ComposerPrimitive.Root className="focus-within:border-zinc-950/20 flex w-full flex-wrap items-end rounded-lg border border-zinc-200 bg-inherit px-2.5 shadow-sm transition-colors ease-in dark:focus-within:border-zinc-300/20 dark:border-zinc-800">
+    <ComposerPrimitive.Root className="focus-within:border-zinc-300/20 flex w-full flex-wrap items-end rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 shadow-sm transition-colors ease-in">
       <ComposerPrimitive.Input
         autoFocus
         placeholder="Write a message..."
         rows={1}
-        className="placeholder:text-zinc-500 max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm outline-none focus:ring-0 disabled:cursor-not-allowed dark:placeholder:text-zinc-400"
+        className="placeholder:text-zinc-500 max-h-40 flex-grow resize-none border-none bg-transparent px-2 py-4 text-sm text-zinc-100 outline-none focus:ring-0 disabled:cursor-not-allowed dark:placeholder:text-zinc-400"
       />
       <ComposerPrimitive.Send asChild>
         <TooltipIconButton
@@ -69,24 +68,24 @@ const MyComposer: FC = () => {
   );
 };
 
-const MyUserMessage: FC = () => {
+const UserMessage: FC = () => {
   return (
     <MessagePrimitive.Root className="grid w-full max-w-2xl auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-2 py-4">
-      <div className="bg-zinc-100 text-zinc-950 col-start-2 row-start-1 max-w-xl break-words rounded-3xl px-5 py-2.5 dark:bg-zinc-800 dark:text-zinc-50">
+      <div className="bg-zinc-800 text-zinc-50 col-start-2 row-start-1 max-w-xl break-words rounded-3xl px-5 py-2.5">
         <MessagePrimitive.Content />
       </div>
     </MessagePrimitive.Root>
   );
 };
 
-const MyAssistantMessage: FC = () => {
+const AssistantMessage: FC = () => {
   return (
     <MessagePrimitive.Root className="relative grid w-full max-w-2xl grid-cols-[auto_1fr] grid-rows-[auto_1fr] py-4">
-      <Avatar className="col-start-1 row-span-full row-start-1 mr-4">
-        <AvatarFallback>A</AvatarFallback>
+      <Avatar className="col-start-1 row-span-full row-start-1 mr-4 bg-zinc-800">
+        <AvatarFallback className="text-zinc-100">A</AvatarFallback>
       </Avatar>
 
-      <div className="text-zinc-950 col-start-2 row-start-1 my-1.5 max-w-xl break-words leading-7 dark:text-zinc-50">
+      <div className="text-zinc-50 col-start-2 row-start-1 my-1.5 max-w-xl break-words leading-7">
         <MessagePrimitive.Content />
       </div>
     </MessagePrimitive.Root>
