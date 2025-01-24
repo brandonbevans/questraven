@@ -4,7 +4,8 @@ import Logo2 from '@/components/icons/Logo2';
 import { Button } from '@/components/ui/button';
 import { getRedirectMethod } from '@/utils/auth-helpers/settings';
 import { createClient } from '@/utils/supabase/client';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, Moon, Sun, User } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,6 +19,12 @@ export default function Navlinks({ user }: NavlinksProps) {
   const router = getRedirectMethod() === 'client' ? useRouter() : null;
   const supabase = createClient();
   const [hasSubscription, setHasSubscription] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     async function checkSubscription() {
@@ -58,7 +65,7 @@ export default function Navlinks({ user }: NavlinksProps) {
           <Button
             variant="default"
             size="sm"
-            className="bg-blue-600 hover:bg-blue-500 text-white"
+            className="bg-blue-600 hover:bg-blue-500 text-zinc-50"
             onClick={() => router?.push('/subscribe')}
           >
             Subscribe Now
@@ -72,7 +79,7 @@ export default function Navlinks({ user }: NavlinksProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="hidden sm:inline-flex items-center gap-2 text-zinc-500 hover:text-zinc-400"
+              className="hidden sm:inline-flex items-center gap-2 text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
               asChild
             >
               <Link href="/account">
@@ -84,16 +91,44 @@ export default function Navlinks({ user }: NavlinksProps) {
               variant="ghost"
               size="sm"
               onClick={handleSignOut}
-              className="text-zinc-500 hover:text-zinc-400 inline-flex items-center gap-2"
+              className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 inline-flex items-center gap-2"
             >
               <LogOut className="w-4 h-4" />
               Sign Out
             </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
+            >
+              {mounted && theme === 'dark' ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+              <span className="sr-only">Toggle theme</span>
+            </Button>
           </>
         ) : (
-          <Link href="/signin" className={s.link}>
-            Sign In
-          </Link>
+          <>
+            <Link href="/signin" className={s.link}>
+              Sign In
+            </Link>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
+            >
+              {mounted && theme === 'dark' ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </>
         )}
       </div>
     </div>

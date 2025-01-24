@@ -1,11 +1,13 @@
 import Navbar from '@/components/ui/Navbar';
 import { Toaster } from '@/components/ui/Toasts/toaster';
-import '@/styles/globals.css';
+import '@/styles/globals.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata, Viewport } from 'next';
+import { ThemeProvider } from 'next-themes';
 import Head from 'next/head';
 import Script from 'next/script';
-import { PropsWithChildren, Suspense } from 'react';
+import { PropsWithChildren } from 'react';
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -83,9 +85,9 @@ export const metadata: Metadata = {
   }
 };
 
-export default async function RootLayout({ children }: PropsWithChildren) {
+export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <Head>
         <Script
           id="json-ld"
@@ -95,34 +97,39 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         />
         {process.env.NODE_ENV === 'production' && (
           <>
-            <GoogleAnalytics gaId="G-T5LLMZVJ2S" />
-            <GoogleTagManager gtmId="GTM-P2DTLHJ6" />
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
+            <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID ?? ''} />
           </>
         )}
       </Head>
-      <body className="bg-black">
-        <Navbar />
-        <main
-          id="skip"
-          className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={true}
+          disableTransitionOnChange
         >
-          {children}
-          {process.env.NODE_ENV === 'production' && (
-            <Script id="clarity-script" strategy="afterInteractive">
-              {`
+          <Navbar />
+          <main
+            id="skip"
+            className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+          >
+            {children}
+            {process.env.NODE_ENV === 'production' && (
+              <Script id="clarity-script" strategy="afterInteractive">
+                {`
             (function(c,l,a,r,i,t,y){
                 c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                 t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
                 y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
             })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID}");
             `}
-            </Script>
-          )}
-        </main>
-        {/* <Footer /> */}
-        <Suspense>
+              </Script>
+            )}
+          </main>
+          {/* <Footer /> */}
           <Toaster />
-        </Suspense>
+        </ThemeProvider>
       </body>
     </html>
   );

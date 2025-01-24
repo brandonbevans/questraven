@@ -45,5 +45,11 @@ module.exports = {
         sm: 'calc(var(--radius) - 4px)'
       }
     }
-  }
+  },
+  plugins: [
+    require('@assistant-ui/react/tailwindcss')({
+      components: ['thread'],
+      shadcn: true
+    })
+  ]
 };
