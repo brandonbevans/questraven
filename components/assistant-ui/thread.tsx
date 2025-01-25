@@ -5,7 +5,7 @@ import {
   MessagePrimitive,
   ThreadPrimitive
 } from '@assistant-ui/react';
-import { SendHorizontalIcon } from 'lucide-react';
+import { BirdIcon, SendHorizontalIcon } from 'lucide-react';
 import type { FC } from 'react';
 
 import { TooltipIconButton } from '@/components/assistant-ui/tooltip-icon-button';
@@ -38,7 +38,8 @@ const ThreadWelcome: FC = () => {
     <ThreadPrimitive.Empty>
       <div className="flex flex-grow flex-col items-center justify-center">
         <Avatar className="bg-zinc-800">
-          <AvatarFallback className="text-zinc-100">C</AvatarFallback>
+          <BirdIcon className="text-zinc-100 size-6 m-auto" />
+          {/* <AvatarFallback className="text-zinc-100">C</AvatarFallback> */}
         </Avatar>
         <p className="mt-4 font-medium text-zinc-100">Speak to the Raven.</p>
       </div>
