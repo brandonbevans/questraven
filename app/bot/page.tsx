@@ -46,8 +46,8 @@ function BotContent() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-zinc-950">
-      <div className="flex flex-1">
+    <div className="flex flex-col min-h-screen h-screen overflow-hidden bg-zinc-950">
+      <div className="flex flex-1 overflow-hidden">
         <div
           className={`${isSidebarOpen ? 'w-80' : 'w-0'} flex-shrink-0 transition-all duration-300`}
         >
@@ -58,7 +58,9 @@ function BotContent() {
             onGameSelect={setSelectedGame}
           />
         </div>
-        <div className={`flex-1 relative ${!isSidebarOpen ? 'pl-16' : ''}`}>
+        <div
+          className={`flex-1 relative overflow-hidden ${!isSidebarOpen ? 'pl-16' : ''}`}
+        >
           {!isSidebarOpen && (
             <Button
               variant="ghost"
