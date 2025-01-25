@@ -116,7 +116,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   // Prevent hydration issues by not rendering anything on server
   if (!mounted) {
     return (
-      <div className="flex h-[calc(100vh-theme(space.16))] flex-col px-4">
+      <div className="flex h-[calc(100vh-6rem)] flex-col px-4">
         <div className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 shadow-xl flex flex-col overflow-hidden">
           <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
             <div className="animate-pulse">Loading...</div>
@@ -130,7 +130,7 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     !hasSubscription && userMessagesCount >= FREE_MESSAGE_LIMIT;
 
   return (
-    <div className="flex h-[calc(100vh-theme(space.16))] flex-col px-4">
+    <div className="flex h-[calc(100vh-6rem)] flex-col px-4">
       <div className="flex-1 rounded-lg border border-zinc-800 bg-zinc-950 shadow-xl flex flex-col overflow-hidden">
         {!hasSubscription && (
           <div className="shrink-0 px-4 pt-4 text-sm border-b border-zinc-800 bg-zinc-900/50">

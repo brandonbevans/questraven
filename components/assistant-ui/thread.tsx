@@ -9,7 +9,7 @@ import { BirdIcon, SendHorizontalIcon } from 'lucide-react';
 import type { FC } from 'react';
 
 import { TooltipIconButton } from '@/components/assistant-ui/tooltip-icon-button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar } from '@/components/ui/avatar';
 
 export const Thread: FC = () => {
   return (
@@ -82,8 +82,9 @@ const UserMessage: FC = () => {
 const AssistantMessage: FC = () => {
   return (
     <MessagePrimitive.Root className="relative grid w-full max-w-2xl grid-cols-[auto_1fr] grid-rows-[auto_1fr] py-4">
-      <Avatar className="col-start-1 row-span-full row-start-1 mr-4 bg-zinc-800">
-        <AvatarFallback className="text-zinc-100">A</AvatarFallback>
+      <Avatar className="bg-zinc-800 mr-4">
+        <BirdIcon className="text-zinc-100 size-6 m-auto" />
+        {/* <AvatarFallback className="text-zinc-100">C</AvatarFallback> */}
       </Avatar>
 
       <div className="text-zinc-50 col-start-2 row-start-1 my-1.5 max-w-xl break-words leading-7">
