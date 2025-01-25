@@ -119,7 +119,7 @@ function LandingPageContent() {
         {/* CTA Button */}
         <div className="relative mb-32">
           <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
-            <Link href="/bot">Talk With The Raven</Link>
+            <Link href="/raven">Talk With The Raven</Link>
           </Button>
           {/* <ArrowDown className="mx-auto mt-8 h-12 w-12 animate-bounce text-blue-500" /> */}
         </div>

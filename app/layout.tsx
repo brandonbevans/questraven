@@ -21,7 +21,7 @@ const jsonLd = {
   url: 'https://www.questraven.ai',
   potentialAction: {
     '@type': 'SearchAction',
-    target: 'https://www.questraven.ai/bot',
+    target: 'https://www.questraven.ai/raven',
     'query-input': 'required name=search_term_string'
   }
 };
