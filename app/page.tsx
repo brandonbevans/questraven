@@ -1,5 +1,5 @@
 import botScreenshot from '@/public/botscreenshot.png';
-import { Brain, Check, Users } from 'lucide-react';
+import { Brain, Check, Users, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -148,24 +148,24 @@ function LandingPageContent() {
         </div>
 
         {/* Comparison Section */}
-        <h2 className="mb-12 text-3xl font-bold">How it compares</h2>
+        <h2 className="mb-12 text-3xl font-bold">How It Compares</h2>
         <div className="mx-auto max-w-3xl overflow-x-auto">
           <table className="w-full border-collapse text-left">
             <thead>
               <tr className="border-b border-zinc-800">
                 <th className="py-4 pr-4">Core features</th>
                 <th className="px-4 py-4 text-blue-500">Quest Raven</th>
-                <th className="px-4 py-4">Traditional Wiki</th>
-                <th className="px-4 py-4">AI Search</th>
+                <th className="px-4 py-4">Guides</th>
+                <th className="px-4 py-4">Community Chat</th>
               </tr>
             </thead>
             <tbody className="text-zinc-400">
               {[
                 'Personalized Assistance',
-                'Real-time Responses',
-                'Natural Language Answers',
-                'Curated Learning & Training',
-                'Community Input'
+                'Instant Response',
+                'Comprehensive Game Knowledge',
+                // 'Curated Learning & Training',
+                'No Spoilers'
               ].map((feature, i) => (
                 <tr key={i} className="border-b border-zinc-800">
                   <td className="py-4 pr-4">{feature}</td>
@@ -173,10 +173,18 @@ function LandingPageContent() {
                     <Check className="h-5 w-5 text-blue-500" />
                   </td>
                   <td className="px-4 py-4">
-                    <div className="h-5 w-5 rounded-full border border-zinc-800" />
+                    {i === 2 ? (
+                      <Check className="h-5 w-5 text-blue-500" />
+                    ) : (
+                      <X className="h-5 w-5 text-red-500" />
+                    )}{' '}
                   </td>
                   <td className="px-4 py-4">
-                    <div className="h-5 w-5 rounded-full border border-zinc-800" />
+                    {i === 0 || i === -1 ? (
+                      <Check className="h-5 w-5 text-blue-500" />
+                    ) : (
+                      <X className="h-5 w-5 text-red-500" />
+                    )}
                   </td>
                 </tr>
               ))}
