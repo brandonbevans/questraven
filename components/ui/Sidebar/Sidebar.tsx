@@ -107,7 +107,7 @@ export default function Sidebar({
                 onClick={() => onGameSelect(game)}
                 className={`w-full flex items-center gap-3 p-2 rounded-lg transition-colors ${
                   selectedGame?.namespace === game.namespace
-                    ? 'bg-blue-600 text-zinc-50'
+                    ? 'bg-blue-600/20 text-zinc-50 hover:bg-blue-600/30'
                     : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50'
                 }`}
               >
@@ -120,7 +120,13 @@ export default function Sidebar({
                 />
                 <div className="text-left">
                   <div className="font-medium">{game.name}</div>
-                  <div className="text-xs text-zinc-500 line-clamp-1">
+                  <div
+                    className={`text-xs ${
+                      selectedGame?.namespace === game.namespace
+                        ? 'text-zinc-200'
+                        : 'text-zinc-500'
+                    } line-clamp-1`}
+                  >
                     {game.description}
                   </div>
                 </div>
