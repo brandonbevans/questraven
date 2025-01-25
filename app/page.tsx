@@ -4,7 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { Button } from '../components/ui/button';
-import { Card } from '../components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle
+} from '../components/ui/card';
 import { SparklesCore } from '../components/ui/sparkles';
 
 import { Metadata } from 'next';
@@ -117,34 +122,49 @@ function LandingPageContent() {
         </div>
 
         {/* Features Section */}
-        <h2 className="mb-12 text-3xl font-bold">Features</h2>
-        <div className="mb-24 grid gap-6 md:grid-cols-2">
-          <Card className="border-zinc-800 bg-zinc-900/50 p-6">
-            <div className="mb-4 inline-block rounded-lg bg-orange-500/10 p-3 text-orange-500">
-              <Brain className="h-6 w-6" />
-            </div>
-            <h3 className="mb-2 text-xl font-semibold">
-              Personalized and Instant Gaming Guidance
-            </h3>
-            <p className="text-zinc-400">
-              Receive custom gaming insights that understand your unique
-              gameplay style and preferences. Get real-time help for any game,
-              any time.
-            </p>
-          </Card>
-          <Card className="border-zinc-800 bg-zinc-900/50 p-6">
-            <div className="mb-4 inline-block rounded-lg bg-green-500/10 p-3 text-green-500">
-              <Users className="h-6 w-6" />
-            </div>
-            <h3 className="mb-2 text-xl font-semibold">
-              Community-driven Knowledge Base
-            </h3>
-            <p className="text-zinc-400">
-              We leverage the expertise of the gaming community. Trust in the
-              collective wisdom of fellow gamers, enhanced by AI to provide
-              accurate and up-to-date gaming advice.
-            </p>
-          </Card>
+        <div className="relative z-10 mx-auto max-w-5xl px-6 mb-32 lg:px-8">
+          <h2 className="mb-12 text-center text-3xl font-bold tracking-tight md:text-4xl">
+            Features
+          </h2>
+          <div className="grid gap-8 md:grid-cols-2">
+            <Card className="relative overflow-hidden border-2 border-zinc-800 bg-zinc-900/90 transition-all hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/10">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-orange-500/20">
+                  <Brain className="h-7 w-7 text-orange-500" />
+                </div>
+                <CardTitle className="text-2xl font-bold tracking-tight text-zinc-50">
+                  Personalized Gaming Guidance
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-base leading-7 text-zinc-300 text-center">
+                  Get custom gaming insights tailored to your unique gameplay
+                  style and preferences. Access real-time help for any game,
+                  whenever you need it.
+                </p>
+              </CardContent>
+              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-orange-500/10 via-transparent to-transparent" />
+            </Card>
+
+            <Card className="relative overflow-hidden border-2 border-zinc-800 bg-zinc-900/90 transition-all hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-green-500/20">
+                  <Users className="h-7 w-7 text-green-500" />
+                </div>
+                <CardTitle className="text-2xl font-bold tracking-tight text-zinc-50">
+                  Community Knowledge Base
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-base leading-7 text-zinc-300 text-center">
+                  Leverage the collective expertise of the gaming community,
+                  enhanced by AI to deliver accurate and up-to-date gaming
+                  advice.
+                </p>
+              </CardContent>
+              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-green-500/10 via-transparent to-transparent" />
+            </Card>
+          </div>
         </div>
 
         {/* Comparison Section */}
