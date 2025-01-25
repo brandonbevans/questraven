@@ -14,14 +14,13 @@ export const getContext = async (
   message: string,
   namespace: string,
   maxTokens = 3000,
-  minScore = 0.2,
+  minScore = 0.3,
   getOnlyText = true
 ): Promise<string | ScoredPineconeRecord[]> => {
   // Get the embeddings of the input message
   const embedding = await getEmbeddings(message);
 
   // Retrieve the matches for the embeddings from the specified namespace
-  console.log('getting matches for ', namespace);
   const matches = await getMatchesFromEmbeddings(embedding, 3, namespace);
 
   // Filter out the matches that have a score lower than the minimum score
