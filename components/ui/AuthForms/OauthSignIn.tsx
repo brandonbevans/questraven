@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { signInWithOAuth } from '@/utils/auth-helpers/client';
 import { type Provider } from '@supabase/supabase-js';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FaGoogle } from 'react-icons/fa';
 
 type OAuthProviders = {
   name: Provider;
   displayName: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
 };
 
 export default function OauthSignIn() {
