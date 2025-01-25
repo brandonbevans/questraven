@@ -1,5 +1,5 @@
 import botScreenshot from '@/public/botscreenshot.png';
-import { Brain, Check, Users, X } from 'lucide-react';
+import { Brain, Check, Clock, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -15,24 +15,27 @@ import { SparklesCore } from '../components/ui/sparkles';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Quest Raven - AI-Powered Game Guide',
+  title: 'Quest Raven - Your Personal AI Gaming Guide & Strategy Assistant',
   description:
-    'Quest Raven is the first ever AI-powered game guide. It provides tips, strategies, walkthroughs, and answers to gaming-related questions in real-time.',
+    'Level up your gaming experience with Quest Raven, the advanced AI-powered game guide that provides instant walkthroughs, quest help, build strategies, and real-time answers for your favorite RPGs and other games.',
   keywords: [
-    'game guide',
-    'ai',
-    'tips',
-    'strategies',
-    'walkthroughs',
-    'answers',
-    'real-time'
+    'AI game guide',
+    'RPG walkthrough',
+    'gaming assistant',
+    'quest help',
+    'game strategies',
+    'build guides',
+    'real-time gaming help',
+    'video game companion',
+    'game walkthrough',
+    'gaming tips'
   ],
   openGraph: {
     url: 'https://questraven.ai',
     type: 'website',
-    title: 'Quest Raven - AI-Powered Game Guide',
+    title: 'Quest Raven - Your Personal AI Gaming Guide & Strategy Assistant',
     description:
-      'Quest Raven is the first ever AI-powered game guide. It provides tips, strategies, walkthroughs, and answers to gaming-related questions in real-time.',
+      'Level up your gaming experience with Quest Raven, the advanced AI-powered game guide that provides instant walkthroughs, quest help, build strategies, and real-time answers for your favorite RPGs and other games.',
     images: [
       {
         url: 'https://questraven.ai/images/home/thumbnail.png',
@@ -44,9 +47,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Quest Raven - AI-Powered Game Guide',
+    title: 'Quest Raven - Your Personal AI Gaming Guide & Strategy Assistant',
     description:
-      'Quest Raven is the first ever AI-powered game guide. It provides tips, strategies, walkthroughs, and answers to gaming-related questions in real-time.',
+      'Level up your gaming experience with Quest Raven, the advanced AI-powered game guide that provides instant walkthroughs, quest help, build strategies, and real-time answers for your favorite RPGs and other games.',
     creator: '@dontdiefallow',
     site: '@dontdiefallow',
     images: [
@@ -81,12 +84,12 @@ function LandingPageContent() {
       {/* Hero Section */}
       <section className="relative mx-auto min-h-screen max-w-6xl px-4 pt-24 text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-          First Ever AI-Powered Game Guide
+          Level Up Your Game With AI
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-400">
-          Join us in creating the future of gaming! Quest Raven provides tips,
-          strategies, walkthroughs, and answers to gaming-related questions in
-          real-time.
+          Skip the endless searching.<br></br> Quest Raven instantly answers all
+          your gaming questions, provides detailed walkthroughs, and offers
+          optimal strategies for your favorite RPGs and other games.
         </p>
 
         {/* Browser Window Mockup */}
@@ -127,39 +130,41 @@ function LandingPageContent() {
             Features
           </h2>
           <div className="grid gap-8 md:grid-cols-2">
+            <Card className="relative overflow-hidden border-2 border-zinc-800 bg-zinc-900/90 transition-all hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-green-500/20">
+                  <Clock className="h-7 w-7 text-green-500" />
+                </div>
+                <CardTitle className="text-2xl font-bold tracking-tight text-zinc-50">
+                  Save Hours of Searching
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-base leading-7 text-zinc-300 text-center">
+                  Turn 15-minute searches into 15-second answers. Stop wasting
+                  time scrolling through guides and videos, and waiting for
+                  responses on Discord. Get instant, accurate solutions to your
+                  gaming challenges, so you can spend more time actually
+                  playing.
+                </p>
+              </CardContent>
+              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-orange-500/10 via-transparent to-transparent" />
+            </Card>
             <Card className="relative overflow-hidden border-2 border-zinc-800 bg-zinc-900/90 transition-all hover:border-orange-500/50 hover:shadow-lg hover:shadow-orange-500/10">
               <CardHeader className="text-center">
                 <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-orange-500/20">
                   <Brain className="h-7 w-7 text-orange-500" />
                 </div>
                 <CardTitle className="text-2xl font-bold tracking-tight text-zinc-50">
-                  Personalized Gaming Guidance
+                  Smart Gaming Assistant
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-base leading-7 text-zinc-300 text-center">
-                  Get custom gaming insights tailored to your unique gameplay
-                  style and preferences. Access real-time help for any game,
-                  whenever you need it.
-                </p>
-              </CardContent>
-              <div className="absolute inset-0 -z-10 bg-gradient-to-br from-orange-500/10 via-transparent to-transparent" />
-            </Card>
-
-            <Card className="relative overflow-hidden border-2 border-zinc-800 bg-zinc-900/90 transition-all hover:border-green-500/50 hover:shadow-lg hover:shadow-green-500/10">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 inline-flex h-14 w-14 items-center justify-center rounded-lg bg-green-500/20">
-                  <Users className="h-7 w-7 text-green-500" />
-                </div>
-                <CardTitle className="text-2xl font-bold tracking-tight text-zinc-50">
-                  Community Knowledge Base
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-base leading-7 text-zinc-300 text-center">
-                  Leverage the collective expertise of the gaming community,
-                  enhanced by AI to deliver accurate and up-to-date gaming
-                  advice.
+                  Our AI analyzes thousands of gaming guides and walkthroughs to
+                  give you precise answers for your specific situation. Whether
+                  you're stuck on a boss or optimizing your character, get the
+                  exact help you need, when you need it.
                 </p>
               </CardContent>
               <div className="absolute inset-0 -z-10 bg-gradient-to-br from-green-500/10 via-transparent to-transparent" />
