@@ -1,4 +1,4 @@
-import { getContext } from '@/utils/pinecone/context';
+import { getContext } from '@/utils/postgres/context';
 import { createClient } from '@/utils/supabase/client';
 import { addMessage } from '@/utils/supabase/queries';
 import { createOpenAI } from '@ai-sdk/openai';

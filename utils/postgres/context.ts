@@ -1,6 +1,5 @@
-import { ScoredPineconeRecord } from '@pinecone-database/pinecone';
 import { getEmbeddings } from '../embeddings';
-import { getMatchesFromEmbeddings } from './pinecone';
+import { getMatchesFromEmbeddings, type ScoredRecord } from './postgres';
 
 export type Metadata = {
   url: string;
@@ -13,10 +12,10 @@ export type Metadata = {
 export const getContext = async (
   message: string,
   namespace: string,
-  maxTokens = 10000,
+  maxTokens = 3000,
   minScore = 0.3,
   getOnlyText = true
-): Promise<string | ScoredPineconeRecord[]> => {
+): Promise<string | ScoredRecord[]> => {
   // Get the embeddings of the input message
   const embedding = await getEmbeddings(message);
 
@@ -27,7 +26,6 @@ export const getContext = async (
   const qualifyingDocs = matches.filter((m) => m.score && m.score > minScore);
 
   if (!getOnlyText) {
-    // Use a map to deduplicate matches by URL
     return qualifyingDocs;
   }
 
