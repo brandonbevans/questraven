@@ -8,6 +8,8 @@
 # testing
 /coverage
 
+/supabase/seed.sql
+
 # next.js
 /.next/
 /out/

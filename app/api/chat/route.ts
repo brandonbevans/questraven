@@ -37,7 +37,6 @@ export async function POST(req: Request) {
       ${context}
       END OF CONTEXT BLOCK
       AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
-      If the context does not provide the answer to question, the AI assistant will say "Hmm. I'm not sure.".
       AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
       AI assistant will not invent anything that is not drawn directly from the context.
       AI assistant will answer the question proportionally to the type of question. If the question is very direct and specific, the AI assistant will answer in a very direct and specific way. If the question is very open-ended, the AI assistant will answer in a very open-ended way.
