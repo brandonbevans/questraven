@@ -1,5 +1,5 @@
 import { ScoredPineconeRecord } from '@pinecone-database/pinecone';
-import { getEmbeddings } from '../embeddings';
+import { getEmbeddings } from './embeddings';
 import { getMatchesFromEmbeddings } from './pinecone';
 
 export type Metadata = {
@@ -13,7 +13,7 @@ export type Metadata = {
 export const getContext = async (
   message: string,
   namespace: string,
-  maxTokens = 10000,
+  maxTokens = 3000,
   minScore = 0.3,
   getOnlyText = true
 ): Promise<string | ScoredPineconeRecord[]> => {

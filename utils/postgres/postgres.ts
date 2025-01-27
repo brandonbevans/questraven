@@ -36,7 +36,6 @@ const getMatchesFromEmbeddings = async (
       console.error('Error querying embeddings:', error);
       throw error;
     }
-    console.log('matches', matches);
 
     // Transform the results to match the expected format
     return matches.map((match: any) => ({
