@@ -36,7 +36,6 @@ function RavenContent() {
       !nameToThreadIdMap.has(selectedGame.namespace) &&
       runtime.thread.getState().messages.length > 0
     ) {
-      console.log('saving old game to thread');
       const currentThreadId = runtime.threads.getState().mainThreadId;
       setNameToThreadIdMap(
         new Map([
@@ -48,15 +47,11 @@ function RavenContent() {
 
     // if the new game has an entry in the map, switch to it, otherwise create a new state
     if (nameToThreadIdMap.has(newGame.namespace)) {
-      console.log('switching to existing thread');
       const threadId = nameToThreadIdMap.get(newGame.namespace);
       if (threadId) {
         runtime.threads.getItemById(threadId).switchTo();
-      } else {
-        console.log('threadId not found, serious error');
       }
     } else {
-      console.log('creating new thread');
       runtime.threads.switchToNewThread();
     }
 
