@@ -6,7 +6,6 @@ import {
   getMessagesByChat,
   getSubscription
 } from '@/utils/supabase/queries';
-import { useEdgeRuntime } from '@assistant-ui/react';
 import { useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
@@ -75,20 +74,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     fetchChat();
   }, [selectedGame, supabase]);
 
-  const runtime = useEdgeRuntime({
-    api: '/api/chat',
-    initialMessages: messages.map((message) => ({
-      role: message.role as 'user' | 'assistant' | 'system',
-      content: message.text
-    })),
-    body: {
-      namespace: selectedGame.namespace,
-      chatId: userChatId
-    }
-  });
-
   return {
-    runtime,
     isLoading,
     messages,
     hasSubscription,

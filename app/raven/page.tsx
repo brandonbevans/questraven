@@ -5,18 +5,141 @@ import Sidebar from '@/components/ui/Sidebar';
 import { Button } from '@/components/ui/button';
 import { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
-import { getGames } from '@/utils/supabase/queries';
+import {
+  createChat,
+  getChatByUserAndGame,
+  getGames
+} from '@/utils/supabase/queries';
+import { AssistantRuntimeProvider, useEdgeRuntime } from '@assistant-ui/react';
 import { ChevronRight } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
 
-function BotContent() {
+function RavenContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<Game | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [userChatId, setUserChatId] = useState<string | undefined>();
   const supabase = createClient();
+  const [nameToThreadIdMap, setNameToThreadIdMap] = useState<
+    Map<string, string>
+  >(new Map());
+
+  function onGameChange(newGame: Game) {
+    if (!selectedGame) {
+      return;
+    }
+    // if the thread doesn't exist in the map and there's messages, save the existing game into it
+    if (
+      !nameToThreadIdMap.has(selectedGame.namespace) &&
+      runtime.thread.getState().messages.length > 0
+    ) {
+      console.log('saving old game to thread');
+      const currentThreadId = runtime.threads.getState().mainThreadId;
+      setNameToThreadIdMap(
+        new Map([
+          ...Array.from(nameToThreadIdMap.entries()),
+          [selectedGame.namespace, currentThreadId]
+        ])
+      );
+    }
+
+    // if the new game has an entry in the map, switch to it, otherwise create a new state
+    if (nameToThreadIdMap.has(newGame.namespace)) {
+      console.log('switching to existing thread');
+      const threadId = nameToThreadIdMap.get(newGame.namespace);
+      if (threadId) {
+        runtime.threads.getItemById(threadId).switchTo();
+      } else {
+        console.log('threadId not found, serious error');
+      }
+    } else {
+      console.log('creating new thread');
+      runtime.threads.switchToNewThread();
+    }
+
+    // TODO this is where we manage the threading, as the game is changing and we have access to the old game and the new game
+    // old game is selectedGame
+
+    // new game is newGame
+    setSelectedGame(newGame);
+  }
+
+  useEffect(() => {
+    async function fetchChat() {
+      if (!selectedGame) {
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+
+        let chat = await getChatByUserAndGame(
+          supabase,
+          user?.id ?? '',
+          selectedGame.id
+        );
+
+        if (!chat) {
+          chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
+        }
+        // else {
+        //   const userMessages = await getMessagesByChat(supabase, chat.id);
+        //   // setMessages(userMessages);
+        // }
+        setUserChatId(chat.id);
+      } catch (error) {
+        console.log('Error fetching chat:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchChat();
+  }, [selectedGame, supabase]);
+
+  // useEffect(() => {
+  //   if (!selectedGame) {
+  //     return;
+  //   }
+  //   if (nameToThreadIdMap.has(selectedGame.namespace)) {
+  //     const threadId = nameToThreadIdMap.get(selectedGame.namespace);
+  //     if (threadId) {
+  //       runtime.threads.getItemById(threadId).switchTo();
+  //     } else {
+  //       console.log('threadId not found, serious error');
+  //     }
+  //   } else {
+  //     runtime.threads.switchToNewThread();
+  //     const currentThreadId = runtime.threads.getState().mainThreadId;
+
+  //     // TODO: fix this
+  //     // runtime.thread.import(buildRepository());
+
+  //     setNameToThreadIdMap(
+  //       new Map([
+  //         ...Array.from(nameToThreadIdMap.entries()),
+  //         [selectedGame.namespace, currentThreadId]
+  //       ])
+  //     );
+  //   }
+  // }, [selectedGame]);
+
+  const runtime = useEdgeRuntime({
+    api: '/api/chat',
+    // initialMessages: messages.map((message) => ({
+    //   role: message.role as 'user' | 'assistant' | 'system',
+    //   content: message.text
+    // })),
+    body: {
+      namespace: selectedGame?.namespace,
+      chatId: userChatId
+    }
+  });
 
   useEffect(() => {
     setMounted(true);
@@ -55,7 +178,7 @@ function BotContent() {
             isOpen={isSidebarOpen}
             setIsOpen={setIsSidebarOpen}
             selectedGame={selectedGame}
-            onGameSelect={setSelectedGame}
+            onGameSelect={onGameChange}
           />
         </div>
         <div
@@ -72,17 +195,19 @@ function BotContent() {
               <ChevronRight className="h-5 w-5" />
             </Button>
           )}
-          <ChatInterface selectedGame={selectedGame} />
+          <AssistantRuntimeProvider runtime={runtime}>
+            <ChatInterface selectedGame={selectedGame} />
+          </AssistantRuntimeProvider>
         </div>
       </div>
     </div>
   );
 }
 
-export default function Bot() {
+export default function Raven() {
   return (
     <Suspense>
-      <BotContent />
+      <RavenContent />
     </Suspense>
   );
 }

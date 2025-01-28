@@ -141,7 +141,6 @@ export const addMessage = cache(
     role: 'user' | 'assistant',
     text: string
   ) => {
-    console.log('Adding message to chat', chatId, role, text);
     const { data, error } = await supabase
       .from('messages')
       .insert({ chat_id: chatId, role: role, text: text });

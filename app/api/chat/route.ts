@@ -22,6 +22,7 @@ export async function POST(req: Request) {
 
     await addMessage(supabase, chatId, message.role, message.content[0].text);
     const context = await getContext(message.content[0].text, namespace);
+    console.log('context', context);
     const prompt = [
       {
         role: 'system',

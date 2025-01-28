@@ -5,11 +5,7 @@ import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/us
 import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { createClient } from '@/utils/supabase/client';
 import { getMessagesCount } from '@/utils/supabase/queries';
-import {
-  AssistantRuntimeProvider,
-  MessageStatus,
-  ThreadMessage
-} from '@assistant-ui/react';
+import { MessageStatus, ThreadMessage } from '@assistant-ui/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -18,17 +14,15 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
   const [mounted, setMounted] = useState(false);
   const [userMessagesCount, setUserMessagesCount] = useState(0);
   const router = useRouter();
-  const { hasSubscription, isLoading, runtime, messages, userChatId } =
-    useChatInterface({
+  const { hasSubscription, isLoading, messages, userChatId } = useChatInterface(
+    {
       selectedGame
-    });
+    }
+  );
   const FREE_MESSAGE_LIMIT = parseInt(
     process.env.NEXT_PUBLIC_FREE_MESSAGE_LIMIT ?? '5'
   );
   const supabase = createClient();
-  const [nameToThreadIdMap, setNameToThreadIdMap] = useState<
-    Map<string, string>
-  >(new Map());
 
   useEffect(() => {
     setMounted(true);
@@ -64,30 +58,6 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
     };
     return repository;
   };
-
-  useEffect(() => {
-    if (nameToThreadIdMap.has(selectedGame.namespace)) {
-      const threadId = nameToThreadIdMap.get(selectedGame.namespace);
-      if (threadId) {
-        runtime.threadList.getItemById(threadId).switchTo();
-      } else {
-        console.log('threadId not found, serious error');
-      }
-    } else {
-      runtime.switchToNewThread();
-      const currentThreadId = runtime.threadList.getState().mainThreadId;
-
-      // TODO: fix this
-      // runtime.thread.import(buildRepository());
-
-      setNameToThreadIdMap(
-        new Map([
-          ...Array.from(nameToThreadIdMap.entries()),
-          [selectedGame.namespace, currentThreadId]
-        ])
-      );
-    }
-  }, [selectedGame]);
 
   useEffect(() => {
     const channel = supabase
@@ -169,31 +139,29 @@ export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
             )}
           </div>
         )}
-        <AssistantRuntimeProvider runtime={runtime}>
-          <div className="flex flex-col h-full overflow-y-auto">
-            {isLoading ? (
-              <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
-                {selectedGame.logo_url && (
-                  <Image
-                    src={selectedGame.logo_url}
-                    alt={`${selectedGame.name} Logo`}
-                    width={50}
-                    height={50}
-                  />
-                )}
-                <div className="text-lg text-zinc-600 mt-2">
-                  Loading {selectedGame.name}
-                </div>
+        <div className="flex flex-col h-full overflow-y-auto">
+          {isLoading ? (
+            <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
+              {selectedGame.logo_url && (
+                <Image
+                  src={selectedGame.logo_url}
+                  alt={`${selectedGame.name} Logo`}
+                  width={50}
+                  height={50}
+                />
+              )}
+              <div className="text-lg text-zinc-600 mt-2">
+                Loading {selectedGame.name}
               </div>
-            ) : (
-              <div
-                className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
-              >
-                <Thread />
-              </div>
-            )}
-          </div>
-        </AssistantRuntimeProvider>
+            </div>
+          ) : (
+            <div
+              className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              <Thread />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
