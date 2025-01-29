@@ -58,7 +58,7 @@ export default function Navlinks({ user }: NavlinksProps) {
   return (
     <div className="relative flex flex-row items-center py-4 md:py-6">
       <div className="flex items-center gap-4">
-        <Link href="/bot" className={s.logo} aria-label="Logo">
+        <Link href="/raven" className={s.logo} aria-label="Logo">
           <Logo2 width={128} height={128} />
         </Link>
         {user && !hasSubscription && (

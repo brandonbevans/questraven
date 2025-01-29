@@ -55,10 +55,6 @@ function RavenContent() {
       runtime.threads.switchToNewThread();
     }
 
-    // TODO this is where we manage the threading, as the game is changing and we have access to the old game and the new game
-    // old game is selectedGame
-
-    // new game is newGame
     setSelectedGame(newGame);
   }
 
@@ -96,33 +92,6 @@ function RavenContent() {
 
     fetchChat();
   }, [selectedGame, supabase]);
-
-  // useEffect(() => {
-  //   if (!selectedGame) {
-  //     return;
-  //   }
-  //   if (nameToThreadIdMap.has(selectedGame.namespace)) {
-  //     const threadId = nameToThreadIdMap.get(selectedGame.namespace);
-  //     if (threadId) {
-  //       runtime.threads.getItemById(threadId).switchTo();
-  //     } else {
-  //       console.log('threadId not found, serious error');
-  //     }
-  //   } else {
-  //     runtime.threads.switchToNewThread();
-  //     const currentThreadId = runtime.threads.getState().mainThreadId;
-
-  //     // TODO: fix this
-  //     // runtime.thread.import(buildRepository());
-
-  //     setNameToThreadIdMap(
-  //       new Map([
-  //         ...Array.from(nameToThreadIdMap.entries()),
-  //         [selectedGame.namespace, currentThreadId]
-  //       ])
-  //     );
-  //   }
-  // }, [selectedGame]);
 
   const runtime = useEdgeRuntime({
     api: '/api/chat',

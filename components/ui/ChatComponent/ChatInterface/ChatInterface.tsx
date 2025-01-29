@@ -2,7 +2,6 @@
 
 import { Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
-import { ChatInterfaceProps } from '@/components/ui/ChatComponent/type';
 import { createClient } from '@/utils/supabase/client';
 import { getMessagesCount } from '@/utils/supabase/queries';
 import { MessageStatus, ThreadMessage } from '@assistant-ui/react';
@@ -10,7 +9,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-export default function ChatInterface({ selectedGame }: ChatInterfaceProps) {
+import { Tables } from 'types_db';
+
+type Game = Tables<'games'>;
+
+export default function ChatInterface({
+  selectedGame
+}: {
+  selectedGame: Game;
+}) {
   const [mounted, setMounted] = useState(false);
   const [userMessagesCount, setUserMessagesCount] = useState(0);
   const router = useRouter();
