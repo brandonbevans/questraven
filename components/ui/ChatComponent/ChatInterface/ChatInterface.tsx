@@ -4,7 +4,12 @@ import { Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { createClient } from '@/utils/supabase/client';
 import { getMessagesCount } from '@/utils/supabase/queries';
-import { MessageStatus, ThreadMessage } from '@assistant-ui/react';
+import {
+  AssistantRuntimeProvider,
+  MessageStatus,
+  ThreadMessage
+} from '@assistant-ui/react';
+import { LocalRuntime } from '@assistant-ui/react/dist/runtimes/local/useLocalRuntime';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -14,9 +19,11 @@ import { Tables } from 'types_db';
 type Game = Tables<'games'>;
 
 export default function ChatInterface({
-  selectedGame
+  selectedGame,
+  runtime
 }: {
   selectedGame: Game;
+  runtime: LocalRuntime;
 }) {
   const [mounted, setMounted] = useState(false);
   const [userMessagesCount, setUserMessagesCount] = useState(0);
@@ -146,29 +153,32 @@ export default function ChatInterface({
             )}
           </div>
         )}
-        <div className="flex flex-col h-full overflow-y-auto">
-          {isLoading ? (
-            <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
-              {selectedGame.logo_url && (
-                <Image
-                  src={selectedGame.logo_url}
-                  alt={`${selectedGame.name} Logo`}
-                  width={50}
-                  height={50}
-                />
-              )}
-              <div className="text-lg text-zinc-600 mt-2">
-                Loading {selectedGame.name}
+
+        <AssistantRuntimeProvider runtime={runtime}>
+          <div className="flex flex-col h-full overflow-y-auto">
+            {isLoading ? (
+              <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
+                {selectedGame.logo_url && (
+                  <Image
+                    src={selectedGame.logo_url}
+                    alt={`${selectedGame.name} Logo`}
+                    width={50}
+                    height={50}
+                  />
+                )}
+                <div className="text-lg text-zinc-600 mt-2">
+                  Loading {selectedGame.name}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div
-              className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
-            >
-              <Thread />
-            </div>
-          )}
-        </div>
+            ) : (
+              <div
+                className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
+              >
+                <Thread />
+              </div>
+            )}
+          </div>
+        </AssistantRuntimeProvider>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import {
   getChatByUserAndGame,
   getGames
 } from '@/utils/supabase/queries';
-import { AssistantRuntimeProvider, useEdgeRuntime } from '@assistant-ui/react';
+import { useEdgeRuntime } from '@assistant-ui/react';
 import { ChevronRight } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -159,9 +159,7 @@ function RavenContent() {
               <ChevronRight className="h-5 w-5" />
             </Button>
           )}
-          <AssistantRuntimeProvider runtime={runtime}>
-            <ChatInterface selectedGame={selectedGame} />
-          </AssistantRuntimeProvider>
+          <ChatInterface selectedGame={selectedGame} runtime={runtime} />
         </div>
       </div>
     </div>
