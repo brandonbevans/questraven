@@ -8,6 +8,7 @@ import {
 import { BirdIcon, SendHorizontalIcon } from 'lucide-react';
 import type { FC } from 'react';
 
+import { MarkdownText } from '@/components/assistant-ui/markdown-text';
 import { TooltipIconButton } from '@/components/assistant-ui/tooltip-icon-button';
 import { Avatar } from '@/components/ui/avatar';
 
@@ -73,7 +74,7 @@ const UserMessage: FC = () => {
   return (
     <MessagePrimitive.Root className="grid w-full max-w-2xl auto-rows-auto grid-cols-[minmax(72px,1fr)_auto] gap-y-2 py-4">
       <div className="bg-zinc-800 text-zinc-50 col-start-2 row-start-1 max-w-xl break-words rounded-3xl px-5 py-2.5">
-        <MessagePrimitive.Content />
+        <MessagePrimitive.Content components={{ Text: MarkdownText }} />
       </div>
     </MessagePrimitive.Root>
   );
@@ -88,7 +89,7 @@ const AssistantMessage: FC = () => {
       </Avatar>
 
       <div className="text-zinc-50 col-start-2 row-start-1 my-1.5 max-w-xl break-words leading-7">
-        <MessagePrimitive.Content />
+        <MessagePrimitive.Content components={{ Text: MarkdownText }} />
       </div>
     </MessagePrimitive.Root>
   );
