@@ -3,7 +3,7 @@ import { Brain, Check, Clock, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import { Button } from '../components/ui/button';
+import { AuroraButton } from '../components/ui/aurora-button';
 import {
   Card,
   CardContent,
@@ -91,6 +91,17 @@ function LandingPageContent() {
           your gaming questions, provides detailed walkthroughs, and offers
           optimal strategies for your favorite RPGs and other games.
         </p>
+        <br></br>
+        <br></br>
+        <br></br>
+        {/* CTA Button */}
+        <div className="relative mb-32">
+          <div className="flex justify-center">
+            <AuroraButton glowClassName="from-pink-500 via-purple-500 to-blue-500">
+              <Link href="/raven">Talk With The Raven</Link>
+            </AuroraButton>
+          </div>
+        </div>
 
         {/* Browser Window Mockup */}
         <div className="relative mx-auto mb-16 max-w-4xl">
@@ -114,14 +125,6 @@ function LandingPageContent() {
             </div>
           </div>
           <div className="absolute -inset-1 -z-10 rounded-lg bg-blue-500/20 blur-2xl" />
-        </div>
-
-        {/* CTA Button */}
-        <div className="relative mb-32">
-          <Button asChild size="lg" className="bg-blue-600 hover:bg-blue-700">
-            <Link href="/raven">Talk With The Raven</Link>
-          </Button>
-          {/* <ArrowDown className="mx-auto mt-8 h-12 w-12 animate-bounce text-blue-500" /> */}
         </div>
 
         {/* Features Section */}
