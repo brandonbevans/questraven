@@ -42,9 +42,13 @@ const getMatchesFromEmbeddings = async (
       metadata: match.metadata,
       score: match.similarity
     }));
-  } catch (e) {
-    console.error('Error querying embeddings:', e);
-    throw new Error(`Error querying embeddings: ${e}`);
+  } catch (e: any) {
+    console.error('Error querying embeddings:', {
+      error: e,
+      message: e.message,
+      details: JSON.stringify(e, null, 2)
+    });
+    throw new Error(`Error querying embeddings: ${JSON.stringify(e, null, 2)}`);
   }
 };
 
