@@ -99,7 +99,6 @@ export type Database = {
           description: string | null
           enabled: boolean | null
           id: string
-          logo_url: string | null
           name: string
           namespace: string
           updated_at: string | null
@@ -109,7 +108,6 @@ export type Database = {
           description?: string | null
           enabled?: boolean | null
           id?: string
-          logo_url?: string | null
           name: string
           namespace: string
           updated_at?: string | null
@@ -119,7 +117,6 @@ export type Database = {
           description?: string | null
           enabled?: boolean | null
           id?: string
-          logo_url?: string | null
           name?: string
           namespace?: string
           updated_at?: string | null

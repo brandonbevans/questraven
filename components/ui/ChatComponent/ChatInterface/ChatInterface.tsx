@@ -161,14 +161,12 @@ export default function ChatInterface({
           <div className="flex flex-col h-full overflow-y-auto">
             {isLoading ? (
               <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
-                {selectedGame.logo_url && (
-                  <Image
-                    src={selectedGame.logo_url}
-                    alt={`${selectedGame.name} Logo`}
-                    width={50}
-                    height={50}
-                  />
-                )}
+                <Image
+                  src={`/logos/${selectedGame.namespace}.png`}
+                  alt={`${selectedGame.name} Logo`}
+                  width={50}
+                  height={50}
+                />
                 <div className="text-lg text-zinc-600 mt-2">
                   Loading {selectedGame.name}
                 </div>

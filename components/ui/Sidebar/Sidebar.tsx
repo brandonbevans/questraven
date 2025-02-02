@@ -112,7 +112,7 @@ export default function Sidebar({
                 }`}
               >
                 <Image
-                  src={game.logo_url ?? ''}
+                  src={`/logos/${game.namespace}.png`}
                   alt={game.name}
                   width={32}
                   height={32}
