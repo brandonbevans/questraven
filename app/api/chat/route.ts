@@ -56,7 +56,9 @@ export async function POST(req: Request) {
         ]
       },
       options: {
-        model: openai(`${process.env.OPENAI_MODEL || 'gpt-4o-mini'}`),
+        model: openai(
+          `${process.env.NEXT_PUBLIC_OPENAI_MODEL || 'gpt-4o-mini'}`
+        ),
         onFinish: async (response) => {
           const messages = response.messages;
           const lastResponseMessage = messages[messages.length - 1];

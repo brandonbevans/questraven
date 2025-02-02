@@ -33,7 +33,12 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     async function checkSubscription() {
       try {
         const data = await getSubscription(supabase);
-        setHasSubscription(Boolean(data));
+        const user = (await supabase.auth.getUser()).data.user;
+        const hasSubscription =
+          Boolean(data) ||
+          user?.email === 'sacummings91@gmail.com' ||
+          user?.email === 'brandon@daytwo.ai';
+        setHasSubscription(hasSubscription);
       } catch (error) {
         console.error('Error checking subscription:', error);
         setHasSubscription(false);
