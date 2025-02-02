@@ -39,7 +39,7 @@ export async function POST(req: Request) {
       END OF CONTEXT BLOCK
       AI assistant will take into account any CONTEXT BLOCK that is provided in a conversation.
       AI assistant will not apologize for previous responses, but instead will indicated new information was gained.
-      AI assistant will not invent anything that is not drawn directly from the context.
+      AI assistant will give step-by-step instructions for the user to follow only if the incoming question warrants it.
       AI assistant will answer the question proportionally to the type of question. If the question is very direct and specific, the AI assistant will answer in a very direct and specific way. If the question is very open-ended, the AI assistant will answer in a very open-ended way.
       Don't be extremely specific unless specifically asked. You want to leave just enough for them to figure some out on their own, unless they ask for something specific.`
           }
