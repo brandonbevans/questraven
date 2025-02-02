@@ -124,7 +124,8 @@ function RavenContent() {
     loadInitialGame();
   }, []);
 
-  if (!mounted || isLoading || !selectedGame) {
+  // Only show the full screen loader if the page isn't mounted or if there isn't an initial game
+  if (!mounted || !selectedGame) {
     return (
       <div className="flex h-screen items-center justify-center bg-zinc-950">
         <div className="animate-pulse text-zinc-400">Loading...</div>
@@ -159,7 +160,13 @@ function RavenContent() {
               <ChevronRight className="h-5 w-5" />
             </Button>
           )}
-          <ChatInterface selectedGame={selectedGame} runtime={runtime} />
+          {isLoading ? (
+            <div className="flex h-full items-center justify-center">
+              <div className="animate-pulse text-zinc-400">Loading chat...</div>
+            </div>
+          ) : (
+            <ChatInterface selectedGame={selectedGame} runtime={runtime} />
+          )}
         </div>
       </div>
     </div>
