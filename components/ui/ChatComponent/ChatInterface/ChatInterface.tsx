@@ -95,7 +95,10 @@ export default function ChatInterface({
     const {
       data: { user }
     } = await supabase.auth.getUser();
-    const userMessagesCount = await getMessagesCount(supabase, user?.id ?? '');
+    if (!user) {
+      return;
+    }
+    const userMessagesCount = await getMessagesCount(supabase, user.id);
     setUserMessagesCount(userMessagesCount);
   };
 

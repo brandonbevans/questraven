@@ -42,7 +42,10 @@ export const getUserDetails = cache(async (supabase: SupabaseClient) => {
 });
 
 export const getGames = cache(async (supabase: SupabaseClient) => {
-  const { data: games, error } = await supabase.from('games').select('*');
+  const { data: games, error } = await supabase
+    .from('games')
+    .select('*')
+    .eq('enabled', true);
   if (error) {
     throw new Error('Failed to fetch games');
   }
@@ -120,12 +123,19 @@ export const getMessagesCount = cache(
   async (supabase: SupabaseClient, userId: string) => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    console.log('userId', userId);
+
+    const { data: chatIds } = await supabase
+      .from('chats')
+      .select('id')
+      .eq('user_id', userId);
 
     const { data, error } = await supabase
       .from('messages')
-      .select('id, chat_id, chats(id, user_id)', { count: 'exact' })
+      .select('id', { count: 'exact' })
       .eq('role', 'user')
-      .gt('created_at', thirtyDaysAgo.toISOString());
+      .gt('created_at', thirtyDaysAgo.toISOString())
+      .in('chat_id', chatIds?.map((row) => row.id) || []);
     if (error) {
       throw new Error('Failed to fetch message count');
     }
