@@ -12,6 +12,8 @@ import {
 } from '../components/ui/card';
 import { SparklesCore } from '../components/ui/sparkles';
 
+import { getGames } from '@/utils/supabase/queries';
+import { createClient } from '@/utils/supabase/server';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -66,7 +68,10 @@ export const metadata: Metadata = {
   }
 };
 
-function LandingPageContent() {
+async function LandingPageContent() {
+  const client = await createClient();
+  const games = await getGames(client);
+
   return (
     <div className="min-h-screen w-full bg-zinc-950 text-white">
       <div className="w-full absolute inset-0 h-screen">
@@ -84,12 +89,11 @@ function LandingPageContent() {
       {/* Hero Section */}
       <section className="relative mx-auto min-h-screen max-w-6xl px-4 pt-24 text-center">
         <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-          Level Up Your Game With AI
+          Instant AI Game Guides
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-400">
-          Skip the endless searching.<br></br> Quest Raven instantly answers all
-          your gaming questions, provides detailed walkthroughs, and offers
-          optimal strategies for your favorite RPGs and other games.
+          No spoilers, no searching — Raven gets the exact video game hints you
+          need, instantly.
         </p>
         <br></br>
         <br></br>
@@ -98,7 +102,7 @@ function LandingPageContent() {
         <div className="relative mb-32">
           <div className="flex justify-center">
             <AuroraButton glowClassName="from-pink-500 via-purple-500 to-blue-500">
-              <Link href="/raven">Talk With The Raven</Link>
+              <Link href="/raven">Get Started For Free</Link>
             </AuroraButton>
           </div>
         </div>
@@ -125,6 +129,32 @@ function LandingPageContent() {
             </div>
           </div>
           <div className="absolute -inset-1 -z-10 rounded-lg bg-blue-500/20 blur-2xl" />
+        </div>
+
+        {/* Supported Games */}
+        <div className="mx-auto max-w-6xl px-4 mb-32">
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-zinc-400">★★★★★ 5.0 rating</span>
+              <span className="text-zinc-700">|</span>
+              <span className="text-sm text-zinc-400">
+                Trusted by 1,000+ gamers
+              </span>
+            </div>
+          </div>
+
+          <div className="mx-auto max-w-4xl">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+              {games?.map((game: { name: string }) => (
+                <div
+                  key={game.name}
+                  className="text-zinc-400 font-semibold text-center p-2 rounded-md hover:bg-zinc-900/50 transition-colors"
+                >
+                  {game.name}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Features Section */}
