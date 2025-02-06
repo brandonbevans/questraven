@@ -1,3 +1,4 @@
+import { GameCard } from '@/components/ui/GameCard';
 import botScreenshot from '@/public/botscreenshot.png';
 import { Brain, Check, Clock, X } from 'lucide-react';
 import Image from 'next/image';
@@ -146,12 +147,7 @@ async function LandingPageContent() {
           <div className="mx-auto max-w-4xl">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
               {games?.map((game: { name: string }) => (
-                <div
-                  key={game.name}
-                  className="text-zinc-400 font-semibold text-center p-2 rounded-md hover:bg-zinc-900/50 transition-colors"
-                >
-                  {game.name}
-                </div>
+                <GameCard key={game.name} game={game} />
               ))}
             </div>
           </div>
