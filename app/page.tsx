@@ -146,7 +146,7 @@ async function LandingPageContent() {
 
           <div className="mx-auto max-w-4xl">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-              {games?.map((game: { name: string }) => (
+              {games?.map((game: { name: string; namespace: string }) => (
                 <GameCard key={game.name} game={game} />
               ))}
             </div>
