@@ -7,7 +7,13 @@ import { Card } from '@/components/ui/card';
 import { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/client';
 import { getGames } from '@/utils/supabase/queries';
-import { ChevronLeft, Home, MessageSquarePlus, PlusCircle } from 'lucide-react';
+import {
+  ChevronLeft,
+  Home,
+  MessageSquarePlus,
+  PlusCircle,
+  Search
+} from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -28,17 +34,27 @@ export default function Sidebar({
   onGameSelect
 }: SidebarProps) {
   const [games, setGames] = useState<Game[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showImprovementDialog, setShowImprovementDialog] = useState(false);
   const [showGameRequestDialog, setShowGameRequestDialog] = useState(false);
   const supabase = createClient();
+
   useEffect(() => {
     getGames(supabase).then((games) => {
       setGames(games);
       setIsLoading(false);
     });
   }, []);
+
+  const filteredGames = games.filter(
+    (game) =>
+      game.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (game.description?.toLowerCase() || '').includes(
+        searchQuery.toLowerCase()
+      )
+  );
 
   if (!isOpen) return null;
 
@@ -99,9 +115,21 @@ export default function Sidebar({
         </div>
 
         <div className="space-y-4 mt-4 flex-1 min-h-0">
-          <h2 className="text-xl font-bold text-zinc-50 px-2">Games</h2>
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-zinc-50 px-2">Games</h2>
+            <div className="relative px-2">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-500" />
+              <input
+                type="text"
+                placeholder="Search games..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-zinc-50 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+              />
+            </div>
+          </div>
           <div className="space-y-2 overflow-y-auto h-full pr-2">
-            {games.map((game) => (
+            {filteredGames.map((game) => (
               <button
                 key={game.namespace}
                 onClick={() => onGameSelect(game)}
