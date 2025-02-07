@@ -67,7 +67,7 @@ export default function Sidebar({
 
   return (
     <div className="h-full border-r border-zinc-800 bg-zinc-950 p-4">
-      <div className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex flex-col h-full">
         <div className="flex items-center justify-between mb-4">
           <div className="space-y-1">
             <Link
@@ -98,9 +98,9 @@ export default function Sidebar({
           </Button>
         </div>
 
-        <div className="space-y-4 mt-4">
+        <div className="space-y-4 mt-4 flex-1 min-h-0">
           <h2 className="text-xl font-bold text-zinc-50 px-2">Games</h2>
-          <div className="space-y-2 overflow-y-auto">
+          <div className="space-y-2 overflow-y-auto h-full pr-2">
             {games.map((game) => (
               <button
                 key={game.namespace}
@@ -135,7 +135,7 @@ export default function Sidebar({
 
             <button
               onClick={() => setShowGameRequestDialog(true)}
-              className="w-full flex items-center gap-3 p-2 mt-8 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50 border-t border-zinc-800 pt-8"
+              className="w-full flex items-center gap-3 p-2 rounded-lg transition-colors text-zinc-400 hover:bg-zinc-800 hover:text-zinc-50 border-t border-zinc-800 pt-8 mt-8 sticky bottom-0 bg-zinc-950"
             >
               <PlusCircle className="h-5 w-5" />
               <div className="text-left">

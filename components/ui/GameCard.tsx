@@ -6,12 +6,13 @@ import { useState } from 'react';
 interface GameCardProps {
   game: {
     name: string;
+    namespace: string;
   };
 }
 
 export function GameCard({ game }: GameCardProps) {
   const [imageError, setImageError] = useState(false);
-  const imagePath = `/logos/${game.name.toLowerCase().replace(/[^a-z0-9]/g, '')}2.png`;
+  const imagePath = `/logos/${game.namespace}2.png`;
 
   return (
     <div className="text-zinc-400 font-semibold text-center p-4 rounded-md hover:bg-zinc-900/50 transition-colors flex flex-col items-center justify-center h-32">
