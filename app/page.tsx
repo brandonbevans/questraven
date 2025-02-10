@@ -103,7 +103,16 @@ async function LandingPageContent() {
         <div className="relative mb-32">
           <div className="flex justify-center">
             <AuroraButton glowClassName="from-pink-500 via-purple-500 to-blue-500">
-              <Link href="/raven">Get Started For Free</Link>
+              <Link
+                href="/raven"
+                prefetch={true}
+                className="flex items-center gap-2"
+              >
+                <span>Get Started For Free</span>
+                <div className="hidden loading:block">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                </div>
+              </Link>
             </AuroraButton>
           </div>
         </div>

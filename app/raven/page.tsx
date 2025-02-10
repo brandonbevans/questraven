@@ -109,11 +109,33 @@ function RavenContent() {
     setMounted(true);
     async function loadInitialGame() {
       try {
-        const games = await getGames(supabase);
+        // Prefetch games data
+        const gamesPromise = getGames(supabase);
+        const userPromise = supabase.auth.getUser();
+
+        const [
+          games,
+          {
+            data: { user }
+          }
+        ] = await Promise.all([gamesPromise, userPromise]);
+
         if (!games || games.length === 0) {
           throw new Error('Failed to fetch initial game');
         }
+
         setSelectedGame(games[0]);
+
+        // Pre-initialize chat for the first game
+        let chat = await getChatByUserAndGame(
+          supabase,
+          user?.id ?? '',
+          games[0].id
+        );
+        if (!chat) {
+          chat = await createChat(supabase, user?.id ?? '', games[0].id);
+        }
+        setUserChatId(chat.id);
       } catch (error) {
         console.error('Error loading initial game:', error);
       } finally {
