@@ -47,9 +47,9 @@ export async function POST(req: Request) {
           await upsertProductRecord(event.data.object as Stripe.Product);
           break;
         case 'plan.created':
-          const plan = event.data.object as Stripe.Plan;
-          const price = await stripe.prices.retrieve(plan.id);
-          await upsertPriceRecord(price);
+          break;
+        case 'price.created':
+          await upsertPriceRecord(event.data.object as Stripe.Price);
           break;
         case 'price.updated':
           await upsertPriceRecord(event.data.object as Stripe.Price);
