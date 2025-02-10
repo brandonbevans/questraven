@@ -9,6 +9,7 @@ import {
 import Stripe from 'stripe';
 
 const relevantEvents = new Set([
+  'plan.created',
   'product.created',
   'product.updated',
   'product.deleted',
@@ -49,8 +50,6 @@ export async function POST(req: Request) {
         case 'plan.created':
           break;
         case 'price.created':
-          await upsertPriceRecord(event.data.object as Stripe.Price);
-          break;
         case 'price.updated':
           await upsertPriceRecord(event.data.object as Stripe.Price);
           break;
@@ -82,6 +81,7 @@ export async function POST(req: Request) {
           }
           break;
         default:
+          console.log(`Unhandled relevant event: ${event.type}`);
           throw new Error('Unhandled relevant event!');
       }
     } catch (error) {
