@@ -3,6 +3,7 @@ import {
   deletePriceRecord,
   deleteProductRecord,
   manageSubscriptionStatusChange,
+  upsertPlanRecord,
   upsertPriceRecord,
   upsertProductRecord
 } from '@/utils/supabase/admin';
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
           await upsertProductRecord(event.data.object as Stripe.Product);
           break;
         case 'plan.created':
+          await upsertPlanRecord(event.data.object as Stripe.Plan);
           break;
         case 'price.created':
         case 'price.updated':

@@ -35,6 +35,10 @@ const upsertProductRecord = async (product: Stripe.Product) => {
   console.log(`Product inserted/updated: ${product.id}`);
 };
 
+const upsertPlanRecord = async (plan: Stripe.Plan) => {
+  /* Fill this in if it won't send any price created record */
+};
+
 const upsertPriceRecord = async (
   price: Stripe.Price,
   retryCount = 0,
@@ -53,6 +57,7 @@ const upsertPriceRecord = async (
     description: null,
     metadata: {}
   };
+  console.log(price);
 
   const { error: upsertError } = await supabaseAdmin
     .from('prices')
@@ -295,6 +300,7 @@ export {
   deletePriceRecord,
   deleteProductRecord,
   manageSubscriptionStatusChange,
+  upsertPlanRecord,
   upsertPriceRecord,
   upsertProductRecord
 };
