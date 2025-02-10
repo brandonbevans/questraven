@@ -105,14 +105,14 @@ export default function Pricing({ user, products, subscription }: Props) {
   }
 
   return (
-    <div className="bg-zinc-950">
+    <div className="w-full h-full bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="space-y-4 text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
             Pricing Plans
           </h1>
-          <p className="max-w-xl mx-auto text-zinc-400 text-lg">
+          <p className="max-w-xl mx-auto text-muted-foreground text-lg">
             Get unlimited access to Quest Raven for a low monthly or yearly
             subscription.
           </p>
@@ -135,9 +135,9 @@ export default function Pricing({ user, products, subscription }: Props) {
                   <Card
                     key={`${product.id}-monthly`}
                     className={cn(
-                      'flex flex-col border-zinc-800 bg-zinc-900/50',
+                      'flex flex-col border-border bg-card hover:shadow-lg transition-shadow duration-200',
                       {
-                        'border-2 border-blue-500': subscription
+                        'border-2 border-primary': subscription
                           ? product.name ===
                               subscription?.prices?.products?.name &&
                             subscription?.prices?.interval === 'month'
@@ -146,23 +146,23 @@ export default function Pricing({ user, products, subscription }: Props) {
                     )}
                   >
                     <CardHeader className="pb-4">
-                      <CardTitle className="flex items-center text-xl text-white">
+                      <CardTitle className="flex items-center text-xl">
                         {product.name}
-                        <span className="ml-2 text-sm text-zinc-400">
+                        <span className="ml-2 text-sm text-muted-foreground">
                           Monthly
                         </span>
                       </CardTitle>
-                      <CardDescription className="mt-1.5">
+                      <CardDescription className="mt-1.5 text-muted-foreground">
                         {product.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col flex-1">
                       <div className="relative mb-8">
                         <div className="flex items-baseline">
-                          <span className="text-3xl font-bold text-white">
+                          <span className="text-4xl font-bold">
                             {formatPrice(monthlyPrice)}
                           </span>
-                          <span className="text-sm text-zinc-400 ml-1">
+                          <span className="text-sm text-muted-foreground ml-1">
                             /month
                           </span>
                         </div>
@@ -171,11 +171,11 @@ export default function Pricing({ user, products, subscription }: Props) {
                       <div className="mt-auto">
                         <Button
                           className="w-full"
-                          variant={subscription ? 'secondary' : 'default'}
+                          variant={subscription ? 'outline' : 'default'}
                           disabled={priceIdLoading === monthlyPrice.id}
                           onClick={() => handleStripeCheckout(monthlyPrice)}
                         >
-                          {subscription ? 'Manage' : 'Subscribe Monthly'}
+                          {subscription ? 'Manage' : 'Subscribe'}
                         </Button>
 
                         {/* Features */}
@@ -186,9 +186,9 @@ export default function Pricing({ user, products, subscription }: Props) {
                           ).map((feature) => (
                             <li
                               key={feature}
-                              className="flex items-center text-zinc-400"
+                              className="flex items-center text-muted-foreground"
                             >
-                              <Check className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0" />
+                              <Check className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
                               {feature}
                             </li>
                           ))}
@@ -203,9 +203,9 @@ export default function Pricing({ user, products, subscription }: Props) {
                   <Card
                     key={`${product.id}-yearly`}
                     className={cn(
-                      'flex flex-col border-zinc-800 bg-zinc-900/50 relative',
+                      'flex flex-col border-border bg-card hover:shadow-lg transition-shadow duration-200 relative',
                       {
-                        'border-2 border-blue-500': subscription
+                        'border-2 border-primary': subscription
                           ? product.name ===
                               subscription?.prices?.products?.name &&
                             subscription?.prices?.interval === 'year'
@@ -217,7 +217,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                       (monthlyPrice.unit_amount || 0) * 12 >
                         (yearlyPrice.unit_amount || 0) && (
                         <div className="absolute -top-[1px] -right-[1px] w-[200px] h-[200px] overflow-hidden pointer-events-none">
-                          <div className="absolute top-[40px] right-[-90px] w-[280px] transform rotate-45 bg-gradient-to-r from-blue-600 to-blue-500 text-center text-xs text-white py-1.5 shadow-md">
+                          <div className="absolute top-[40px] right-[-90px] w-[280px] transform rotate-45 bg-gradient-to-r from-primary to-primary/80 text-center text-xs text-primary-foreground py-1.5 shadow-md">
                             {Math.round(
                               (((monthlyPrice.unit_amount || 0) * 12 -
                                 (yearlyPrice.unit_amount || 0)) /
@@ -229,31 +229,26 @@ export default function Pricing({ user, products, subscription }: Props) {
                         </div>
                       )}
                     <CardHeader className="pb-4">
-                      <CardTitle className="flex items-center text-xl text-white">
+                      <CardTitle className="flex items-center text-xl">
                         {product.name}
-                        <span className="ml-2 text-sm text-zinc-400">
+                        <span className="ml-2 text-sm text-muted-foreground">
                           Yearly
                         </span>
+                        <span className="ml-2 inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                          🔥 Most Popular
+                        </span>
                       </CardTitle>
-                      <CardDescription className="mt-1.5">
+                      <CardDescription className="mt-1.5 text-muted-foreground">
                         {product.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-col flex-1">
                       <div className="relative mb-8">
-                        <div className="flex items-baseline">
-                          <span className="text-3xl font-bold text-white">
-                            {formatPrice(yearlyPrice)}
-                          </span>
-                          <span className="text-sm text-zinc-400 ml-1">
-                            /year
-                          </span>
-                        </div>
                         {monthlyPrice &&
                           (monthlyPrice.unit_amount || 0) * 12 >
                             (yearlyPrice.unit_amount || 0) && (
-                            <div className="flex items-center mt-2">
-                              <span className="text-gray-400 line-through text-sm">
+                            <div className="flex items-baseline mb-2">
+                              <span className="text-muted-foreground line-through text-lg">
                                 {new Intl.NumberFormat('en-US', {
                                   style: 'currency',
                                   currency: yearlyPrice.currency!,
@@ -261,20 +256,28 @@ export default function Pricing({ user, products, subscription }: Props) {
                                 }).format(
                                   ((monthlyPrice.unit_amount || 0) * 12) / 100
                                 )}
-                                /year
+                                <span className="text-sm">/year</span>
                               </span>
                             </div>
                           )}
+                        <div className="flex items-baseline">
+                          <span className="text-4xl font-bold">
+                            {formatPrice(yearlyPrice)}
+                          </span>
+                          <span className="text-sm text-muted-foreground ml-1">
+                            /year
+                          </span>
+                        </div>
                       </div>
 
                       <div className="mt-auto">
                         <Button
                           className="w-full"
-                          variant={subscription ? 'secondary' : 'default'}
+                          variant={subscription ? 'outline' : 'default'}
                           disabled={priceIdLoading === yearlyPrice.id}
                           onClick={() => handleStripeCheckout(yearlyPrice)}
                         >
-                          {subscription ? 'Manage' : 'Subscribe Yearly'}
+                          {subscription ? 'Manage' : 'Subscribe'}
                         </Button>
 
                         {/* Features */}
@@ -285,9 +288,9 @@ export default function Pricing({ user, products, subscription }: Props) {
                           ).map((feature) => (
                             <li
                               key={feature}
-                              className="flex items-center text-zinc-400"
+                              className="flex items-center text-muted-foreground"
                             >
-                              <Check className="w-4 h-4 text-blue-500 mr-2 flex-shrink-0" />
+                              <Check className="w-4 h-4 text-primary mr-2 flex-shrink-0" />
                               {feature}
                             </li>
                           ))}
