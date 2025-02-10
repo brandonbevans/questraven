@@ -16,7 +16,7 @@ import { User } from '@supabase/supabase-js';
 import cn from 'classnames';
 import { Check } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 type Subscription = Tables<'subscriptions'>;
 type Product = Tables<'products'>;
@@ -129,19 +129,14 @@ export default function Pricing({ user, products, subscription }: Props) {
             );
 
             return (
-              <>
+              <Fragment key={product.id}>
                 {/* Monthly Plan Card */}
                 {monthlyPrice && (
                   <Card
-                    key={`${product.id}-monthly`}
                     className={cn(
                       'flex flex-col border-border bg-card hover:shadow-lg transition-shadow duration-200',
                       {
                         'border-2 border-primary': subscription
-                          ? product.name ===
-                              subscription?.prices?.products?.name &&
-                            subscription?.prices?.interval === 'month'
-                          : product.name === 'Freelancer'
                       }
                     )}
                   >
@@ -201,7 +196,6 @@ export default function Pricing({ user, products, subscription }: Props) {
                 {/* Yearly Plan Card */}
                 {yearlyPrice && (
                   <Card
-                    key={`${product.id}-yearly`}
                     className={cn(
                       'flex flex-col border-border bg-card hover:shadow-lg transition-shadow duration-200 relative',
                       {
@@ -299,7 +293,7 @@ export default function Pricing({ user, products, subscription }: Props) {
                     </CardContent>
                   </Card>
                 )}
-              </>
+              </Fragment>
             );
           })}
         </div>
