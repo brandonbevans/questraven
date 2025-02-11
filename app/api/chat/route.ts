@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     const { messages, namespace, chatId } = await req.json();
 
     const message = messages[messages.length - 1];
-
+    console.log('Adding user message to supabase..', message);
     await addMessage(supabase, chatId, message.role, message.content[0].text);
     const context = await getContext(message.content[0].text, namespace);
     const prompt = [
@@ -59,13 +59,20 @@ export async function POST(req: Request) {
           `${process.env.NEXT_PUBLIC_OPENAI_MODEL || 'gpt-4o-mini'}`
         ),
         onFinish: async (response) => {
+          console.log('onFinish called..');
           const messages = response.messages;
           const lastResponseMessage = messages[messages.length - 1];
+          console.log('lastResponseMessage', lastResponseMessage);
           if (lastResponseMessage.role === 'assistant') {
             const content = lastResponseMessage.content.find(
               (c) => c.type === 'text'
             );
+            console.log('content', content);
             if (content && content.type === 'text') {
+              console.log(
+                'Adding assistant message to supabase..',
+                content.text
+              );
               await addMessage(supabase, chatId, 'assistant', content.text);
             } else {
               console.error(

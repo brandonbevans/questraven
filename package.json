@@ -48,7 +48,7 @@
     "@tsparticles/slim": "^3.8.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "ai": "^4.1.5",
-    "assistant-ui": "^0.0.31",
+    "assistant-ui": "^0.0.38",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
