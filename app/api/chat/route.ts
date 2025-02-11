@@ -73,7 +73,13 @@ export async function POST(req: Request) {
                 'Adding assistant message to supabase..',
                 content.text
               );
-              await addMessage(supabase, chatId, 'assistant', content.text);
+              const msg = await addMessage(
+                supabase,
+                chatId,
+                'assistant',
+                content.text
+              );
+              console.log('Inserted assistant msg: ', msg);
             } else {
               console.error(
                 'No text content found in the last response message: ',
