@@ -164,7 +164,7 @@ export async function signInWithPassword(formData: FormData) {
 }
 
 export async function signUp(formData: FormData) {
-  const callbackURL = getURL('/auth/callback');
+  const callbackURL = getURL('/thank-you');
 
   const email = String(formData.get('email')).trim();
   const password = String(formData.get('password')).trim();
