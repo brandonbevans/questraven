@@ -79,7 +79,7 @@ export async function POST(req: Request) {
                 'assistant',
                 content.text
               );
-              console.log('Inserted assistant msg: ', msg);
+              console.log('Inserted assistant msg:', msg);
             } else {
               console.error(
                 'No text content found in the last response message: ',
