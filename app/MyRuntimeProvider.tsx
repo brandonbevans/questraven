@@ -21,7 +21,7 @@ export function MyRuntimeProvider({
   }));
 
   const runtime = useChatRuntime({
-    api: '/api/chat2',
+    api: '/api/chat',
     body: {
       chatId: chatId,
       namespace: namespace
