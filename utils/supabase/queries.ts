@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { Message } from 'ai';
 import { cache } from 'react';
 
 export const getUser = cache(async (supabase: SupabaseClient) => {
@@ -106,60 +107,26 @@ export const getChatByUserAndGame = cache(
   }
 );
 
-export const getMessagesByChat = cache(
-  async (supabase: SupabaseClient, chatId: string) => {
-    const { data, error } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('chat_id', chatId);
-    if (error) {
-      throw new Error('Failed to fetch messages');
-    }
-    return data;
-  }
-);
-
 export const getMessagesCount = cache(
   async (supabase: SupabaseClient, userId: string) => {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    console.log('userId', userId);
-
-    const { data: chatIds } = await supabase
+    const { data, error } = await supabase
       .from('chats')
-      .select('id')
+      .select('messages')
       .eq('user_id', userId);
 
-    const { data, error } = await supabase
-      .from('messages')
-      .select('id', { count: 'exact' })
-      .eq('role', 'user')
-      .gt('created_at', thirtyDaysAgo.toISOString())
-      .in('chat_id', chatIds?.map((row) => row.id) || []);
     if (error) {
-      throw new Error('Failed to fetch message count');
+      throw new Error('Failed to fetch messages count');
     }
 
-    return data?.length || 0;
-  }
-);
+    // Sum up the total user messages across all chats
+    const totalUserMessages = data.reduce((total, chat) => {
+      const userMessages =
+        chat.messages?.filter((msg: { role: string }) => msg.role === 'user') ||
+        [];
+      return total + userMessages.length;
+    }, 0);
 
-export const addMessage = cache(
-  async (
-    supabase: SupabaseClient,
-    chatId: string,
-    role: 'user' | 'assistant',
-    text: string
-  ) => {
-    console.log('Adding message to supabase..', chatId, role, text);
-    const { data, error } = await supabase
-      .from('messages')
-      .insert({ chat_id: chatId, role: role, text: text });
-    if (error) {
-      console.error('Failed to create message: ', error);
-      throw new Error('Failed to create message: ' + error.message);
-    }
-    return data;
+    return totalUserMessages;
   }
 );
 
@@ -171,6 +138,27 @@ export const createNote = cache(
     const { data, error } = await supabase.from('notes').insert(note);
     if (error) {
       throw new Error('Failed to create note');
+    }
+    return data;
+  }
+);
+
+export const saveChat = cache(
+  async (supabase: SupabaseClient, chatId: string, messages: Message[]) => {
+    // Convert messages to a simpler format that PostgreSQL can handle
+    const simplifiedMessages = messages.map((msg) => ({
+      role: msg.role,
+      content: msg.content,
+      id: msg.id,
+      createdAt: msg.createdAt
+    }));
+
+    const { data, error } = await supabase
+      .from('chats')
+      .update({ messages: simplifiedMessages })
+      .eq('id', chatId);
+    if (error) {
+      throw new Error('Failed to save chat: ' + error.message);
     }
     return data;
   }

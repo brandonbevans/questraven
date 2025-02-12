@@ -10,7 +10,6 @@ import {
   getChatByUserAndGame,
   getGames
 } from '@/utils/supabase/queries';
-import { useEdgeRuntime } from '@assistant-ui/react';
 import { ChevronRight } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
 
@@ -23,38 +22,8 @@ function RavenContent() {
   const [mounted, setMounted] = useState(false);
   const [userChatId, setUserChatId] = useState<string | undefined>();
   const supabase = createClient();
-  const [nameToThreadIdMap, setNameToThreadIdMap] = useState<
-    Map<string, string>
-  >(new Map());
 
   function onGameChange(newGame: Game) {
-    if (!selectedGame) {
-      return;
-    }
-    // if the thread doesn't exist in the map and there's messages, save the existing game into it
-    if (
-      !nameToThreadIdMap.has(selectedGame.namespace) &&
-      runtime.thread.getState().messages.length > 0
-    ) {
-      const currentThreadId = runtime.threads.getState().mainThreadId;
-      setNameToThreadIdMap(
-        new Map([
-          ...Array.from(nameToThreadIdMap.entries()),
-          [selectedGame.namespace, currentThreadId]
-        ])
-      );
-    }
-
-    // if the new game has an entry in the map, switch to it, otherwise create a new state
-    if (nameToThreadIdMap.has(newGame.namespace)) {
-      const threadId = nameToThreadIdMap.get(newGame.namespace);
-      if (threadId) {
-        runtime.threads.getItemById(threadId).switchTo();
-      }
-    } else {
-      runtime.threads.switchToNewThread();
-    }
-
     setSelectedGame(newGame);
   }
 
@@ -78,10 +47,6 @@ function RavenContent() {
         if (!chat) {
           chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
         }
-        // else {
-        //   const userMessages = await getMessagesByChat(supabase, chat.id);
-        //   // setMessages(userMessages);
-        // }
         setUserChatId(chat.id);
       } catch (error) {
         console.log('Error fetching chat:', error);
@@ -92,18 +57,6 @@ function RavenContent() {
 
     fetchChat();
   }, [selectedGame, supabase]);
-
-  const runtime = useEdgeRuntime({
-    api: '/api/chat',
-    // initialMessages: messages.map((message) => ({
-    //   role: message.role as 'user' | 'assistant' | 'system',
-    //   content: message.text
-    // })),
-    body: {
-      namespace: selectedGame?.namespace,
-      chatId: userChatId
-    }
-  });
 
   useEffect(() => {
     setMounted(true);
@@ -187,7 +140,7 @@ function RavenContent() {
               <div className="animate-pulse text-zinc-400">Loading chat...</div>
             </div>
           ) : (
-            <ChatInterface selectedGame={selectedGame} runtime={runtime} />
+            <ChatInterface selectedGame={selectedGame} />
           )}
         </div>
       </div>

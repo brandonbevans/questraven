@@ -1,15 +1,10 @@
 'use client';
 
+import { MyRuntimeProvider } from '@/app/MyRuntimeProvider';
 import { Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { createClient } from '@/utils/supabase/client';
 import { getMessagesCount } from '@/utils/supabase/queries';
-import {
-  AssistantRuntimeProvider,
-  MessageStatus,
-  ThreadMessage
-} from '@assistant-ui/react';
-import { LocalRuntime } from '@assistant-ui/react/dist/runtimes/local/useLocalRuntime';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -19,11 +14,9 @@ import { Tables } from 'types_db';
 type Game = Tables<'games'>;
 
 export default function ChatInterface({
-  selectedGame,
-  runtime
+  selectedGame
 }: {
   selectedGame: Game;
-  runtime: LocalRuntime;
 }) {
   const [mounted, setMounted] = useState(false);
   const [userMessagesCount, setUserMessagesCount] = useState(0);
@@ -43,42 +36,12 @@ export default function ChatInterface({
     getUserMessagesCount();
   }, []);
 
-  const buildRepository = () => {
-    const repository = {
-      messages: messages
-        .filter((message) => message.chat_id === userChatId)
-        .map((message) => ({
-          message: {
-            role: message.role as 'user' | 'assistant' | 'system',
-            content: [
-              {
-                type: 'text',
-                text: message.text
-              }
-            ],
-            metadata: {
-              unstable_data: [],
-              custom: {}
-            },
-            id: message.id,
-            createdAt: new Date(message.created_at ?? ''),
-            status: {
-              type: 'complete',
-              reason: 'stop'
-            } as MessageStatus
-          } as ThreadMessage,
-          parentId: null
-        }))
-    };
-    return repository;
-  };
-
   useEffect(() => {
     const channel = supabase
-      .channel('unique-channel-name')
+      .channel('chats-updated')
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'messages' },
+        { event: 'UPDATE', schema: 'public', table: 'chats' },
         (payload) => {
           getUserMessagesCount();
         }
@@ -157,7 +120,18 @@ export default function ChatInterface({
           </div>
         )}
 
-        <AssistantRuntimeProvider runtime={runtime}>
+        <MyRuntimeProvider
+          key={userChatId}
+          chatId={userChatId}
+          namespace={selectedGame.namespace}
+          messages={
+            messages?.map((msg) => ({
+              id: msg.id,
+              role: msg.role as 'system' | 'user' | 'assistant',
+              content: msg.content
+            })) ?? []
+          }
+        >
           <div className="flex flex-col h-full overflow-y-auto">
             {isLoading ? (
               <div className="flex-1 flex flex-col justify-center items-center text-zinc-400">
@@ -179,7 +153,7 @@ export default function ChatInterface({
               </div>
             )}
           </div>
-        </AssistantRuntimeProvider>
+        </MyRuntimeProvider>
       </div>
     </div>
   );

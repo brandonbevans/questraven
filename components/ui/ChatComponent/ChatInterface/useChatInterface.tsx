@@ -3,13 +3,12 @@ import { createClient } from '@/utils/supabase/client';
 import {
   createChat,
   getChatByUserAndGame,
-  getMessagesByChat,
   getSubscription
 } from '@/utils/supabase/queries';
+import { Message } from 'ai';
 import { useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
-type Message = Tables<'messages'>;
 
 export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
   const [hasSubscription, setHasSubscription] = useState(false);
@@ -64,9 +63,10 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
 
         if (!chat) {
           chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
+          console.log('chat messages:', chat.messages);
         } else {
-          const userMessages = await getMessagesByChat(supabase, chat.id);
-          setMessages(userMessages);
+          console.log('chat messages:', chat.messages);
+          setMessages(chat.messages);
         }
         setUserChatId(chat.id);
       } catch (error) {

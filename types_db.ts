@@ -14,6 +14,7 @@ export type Database = {
           created_at: string | null
           game_id: string
           id: string
+          messages: Json[] | null
           updated_at: string | null
           user_id: string
         }
@@ -21,6 +22,7 @@ export type Database = {
           created_at?: string | null
           game_id: string
           id?: string
+          messages?: Json[] | null
           updated_at?: string | null
           user_id: string
         }
@@ -28,6 +30,7 @@ export type Database = {
           created_at?: string | null
           game_id?: string
           id?: string
+          messages?: Json[] | null
           updated_at?: string | null
           user_id?: string
         }
@@ -122,38 +125,6 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
-      }
-      messages: {
-        Row: {
-          chat_id: string
-          created_at: string | null
-          id: string
-          role: string
-          text: string
-        }
-        Insert: {
-          chat_id: string
-          created_at?: string | null
-          id?: string
-          role: string
-          text: string
-        }
-        Update: {
-          chat_id?: string
-          created_at?: string | null
-          id?: string
-          role?: string
-          text?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "messages_chat_id_fkey"
-            columns: ["chat_id"]
-            isOneToOne: false
-            referencedRelation: "chats"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       notes: {
         Row: {
