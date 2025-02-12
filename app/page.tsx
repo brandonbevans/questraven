@@ -93,8 +93,8 @@ async function LandingPageContent() {
           Instant AI Game Guides
         </h1>
         <p className="mx-auto mb-8 max-w-2xl text-lg text-zinc-400">
-          No spoilers, no searching — Raven gets the exact video game hints you
-          need, instantly.
+          No spoilers, no searching — Raven gives you exactly what you need,
+          instantly.
         </p>
         <br></br>
         <br></br>
