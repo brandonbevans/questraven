@@ -122,6 +122,10 @@ export const getMessagesCount = cache(
     const { data, error } = await supabase
       .from('chats')
       .select('messages')
+      .gte(
+        'updated_at',
+        new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString()
+      )
       .eq('user_id', userId);
 
     if (error) {
@@ -165,7 +169,7 @@ export const saveChat = cache(
 
     const { data, error } = await supabase
       .from('chats')
-      .update({ messages: simplifiedMessages })
+      .update({ messages: simplifiedMessages, updated_at: new Date() })
       .eq('id', chatId);
     if (error) {
       throw new Error('Failed to save chat: ' + error.message);

@@ -15,9 +15,8 @@ export function MyRuntimeProvider({
   messages: Message[];
 }>) {
   const initialMessages = messages.map((msg) => ({
-    role: msg.role as 'system' | 'user' | 'assistant',
-    content: msg.content,
-    createdAt: msg.createdAt
+    ...msg,
+    role: msg.role as 'system' | 'user' | 'assistant'
   }));
 
   const runtime = useChatRuntime({

@@ -135,13 +135,7 @@ export default function ChatInterface({
           key={userChatId}
           chatId={userChatId}
           namespace={selectedGame.namespace}
-          messages={
-            messages?.map((msg) => ({
-              id: msg.id,
-              role: msg.role as 'system' | 'user' | 'assistant',
-              content: msg.content
-            })) ?? []
-          }
+          messages={messages}
         >
           <div className="flex flex-col h-full overflow-y-auto">
             {isLoading ? (
