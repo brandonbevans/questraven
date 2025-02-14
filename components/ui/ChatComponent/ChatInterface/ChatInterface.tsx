@@ -20,6 +20,9 @@ export default function ChatInterface({
 }) {
   const [mounted, setMounted] = useState(false);
   const [userMessagesCount, setUserMessagesCount] = useState(0);
+  const [upgradeText, setUpgradeText] = useState(
+    'Upgrade for unlimited access'
+  );
   const router = useRouter();
   const { hasSubscription, isLoading, messages, userChatId } = useChatInterface(
     {
@@ -34,6 +37,7 @@ export default function ChatInterface({
   useEffect(() => {
     setMounted(true);
     getUserMessagesCount();
+    getUpgradeText().then(setUpgradeText);
   }, []);
 
   useEffect(() => {
@@ -63,6 +67,15 @@ export default function ChatInterface({
     setUserMessagesCount(userMessagesCount);
   };
 
+  const getUpgradeText = async () => {
+    const user = await getUser(supabase);
+    if (user?.is_anonymous) {
+      return 'Join for more credits';
+    } else {
+      return 'Get unlimited access';
+    }
+  };
+
   // Prevent hydration issues by not rendering anything on server
   if (!mounted) {
     return (
@@ -87,7 +100,7 @@ export default function ChatInterface({
             {isLimitReached ? (
               <div className="pb-4 flex items-center justify-between">
                 <span className="text-red-400">
-                  You&apos;ve reached your free message limit.
+                  0 credits left for today. Come back tomorrow.
                 </span>
                 <button
                   className="ml-2 px-4 py-1 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
@@ -111,7 +124,7 @@ export default function ChatInterface({
                     router.push('/subscribe');
                   }}
                 >
-                  Upgrade for unlimited access
+                  {upgradeText}
                 </button>
               </div>
             )}
