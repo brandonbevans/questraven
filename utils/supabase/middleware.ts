@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 import { getUser } from './queries';
 
-const protectedRoutes = ['/account'];
+const protectedRoutes = ['/account', '/subscribe'];
 
 export const createClient = (request: NextRequest) => {
   // Create an unmodified response
