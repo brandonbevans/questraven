@@ -4,7 +4,7 @@ import { MyRuntimeProvider } from '@/app/MyRuntimeProvider';
 import { Thread } from '@/components/assistant-ui/thread';
 import { useChatInterface } from '@/components/ui/ChatComponent/ChatInterface/useChatInterface';
 import { createClient } from '@/utils/supabase/client';
-import { getMessagesCount } from '@/utils/supabase/queries';
+import { getMessagesCount, getUser } from '@/utils/supabase/queries';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -55,9 +55,7 @@ export default function ChatInterface({
   }, [supabase]);
 
   const getUserMessagesCount = async () => {
-    const {
-      data: { user }
-    } = await supabase.auth.getUser();
+    const user = await getUser(supabase);
     if (!user) {
       return;
     }

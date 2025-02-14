@@ -1,4 +1,4 @@
-import { SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient, User } from '@supabase/supabase-js';
 import { Message } from 'ai';
 import { cache } from 'react';
 
@@ -6,6 +6,17 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
   const {
     data: { user }
   } = await supabase.auth.getUser();
+
+  if (!user) {
+    console.log('No user found for raven, need to get anonymous user');
+    /// check cookies for anon access token and refresh token
+    const { data } = await supabase.auth.signInAnonymously();
+    if (!data.user) {
+      throw new Error('Failed to sign in anonymously');
+    }
+    return data.user as User;
+  }
+
   if (!user) {
     throw new Error('User not found');
   }
@@ -78,7 +89,7 @@ export const createChat = cache(
       })
       .single();
     if (error) {
-      throw new Error('Failed to create chat');
+      throw new Error('Failed to create chat', error);
     }
     return data;
   }

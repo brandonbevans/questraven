@@ -1,7 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { getUser } from './queries';
 
-const protectedRoutes = ['/raven', '/account'];
+const protectedRoutes = ['/account'];
 
 export const createClient = (request: NextRequest) => {
   // Create an unmodified response
@@ -67,10 +68,13 @@ export const updateSession = async (request: NextRequest) => {
 
   // This will refresh session if expired - required for Server Components
   // https://supabase.com/docs/guides/auth/server-side/nextjs
-  const user = await supabase.auth.getUser();
+  const user = await getUser(supabase);
 
-  if (protectedRoutes.includes(request.nextUrl.pathname) && !user?.data?.user) {
-    return NextResponse.redirect(new URL('/signin', request.url));
+  if (
+    protectedRoutes.includes(request.nextUrl.pathname) &&
+    (!user || user.is_anonymous)
+  ) {
+    return NextResponse.redirect(new URL('/signin/signup', request.url));
   }
 
   return response;

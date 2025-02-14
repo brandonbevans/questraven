@@ -3,7 +3,8 @@ import { createClient } from '@/utils/supabase/client';
 import {
   createChat,
   getChatByUserAndGame,
-  getSubscription
+  getSubscription,
+  getUser
 } from '@/utils/supabase/queries';
 import { Message } from 'ai';
 import { useEffect, useState } from 'react';
@@ -32,7 +33,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     async function checkSubscription() {
       try {
         const data = await getSubscription(supabase);
-        const user = (await supabase.auth.getUser()).data.user;
+        const user = await getUser(supabase);
         const hasSubscription =
           Boolean(data) ||
           user?.email === 'sacummings91@gmail.com' ||
@@ -51,9 +52,7 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
     async function fetchChat() {
       setIsLoading(true);
       try {
-        const {
-          data: { user }
-        } = await supabase.auth.getUser();
+        const user = await getUser(supabase);
 
         let chat = await getChatByUserAndGame(
           supabase,

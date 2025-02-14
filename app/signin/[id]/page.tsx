@@ -13,6 +13,7 @@ import {
   getRedirectMethod,
   getViewTypes
 } from '@/utils/auth-helpers/settings';
+import { getUser } from '@/utils/supabase/queries';
 import { createClient } from '@/utils/supabase/server';
 import { cookies } from 'next/headers';
 import Image from 'next/image';
@@ -42,14 +43,12 @@ export default async function SignIn(props: any) {
   // Check if the user is already logged in and redirect to the account page if so
   const supabase = await createClient();
 
-  const {
-    data: { user }
-  } = await supabase.auth.getUser();
+  const user = await getUser(supabase);
 
   if (user && viewProp !== 'update_password') {
     return redirect('/');
   } else if (!user && viewProp === 'update_password') {
-    return redirect('/signin');
+    return redirect('/signin/signup');
   }
 
   return (

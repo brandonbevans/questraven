@@ -8,7 +8,8 @@ import { createClient } from '@/utils/supabase/client';
 import {
   createChat,
   getChatByUserAndGame,
-  getGames
+  getGames,
+  getUser
 } from '@/utils/supabase/queries';
 import { ChevronRight } from 'lucide-react';
 import { Suspense, useEffect, useState } from 'react';
@@ -34,9 +35,7 @@ function RavenContent() {
       }
       setIsLoading(true);
       try {
-        const {
-          data: { user }
-        } = await supabase.auth.getUser();
+        const user = await getUser(supabase);
 
         let chat = await getChatByUserAndGame(
           supabase,
@@ -64,17 +63,15 @@ function RavenContent() {
       try {
         // Prefetch games data
         const gamesPromise = getGames(supabase);
-        const userPromise = supabase.auth.getUser();
+        const userPromise = getUser(supabase);
 
-        const [
-          games,
-          {
-            data: { user }
-          }
-        ] = await Promise.all([gamesPromise, userPromise]);
+        const [games, user] = await Promise.all([gamesPromise, userPromise]);
 
         if (!games || games.length === 0) {
           throw new Error('Failed to fetch initial game');
+        }
+        if (!user) {
+          throw new Error('Failed to fetch user');
         }
 
         setSelectedGame(games[0]);
