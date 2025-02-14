@@ -51,9 +51,9 @@ export default function Pricing({ user, products, subscription }: Props) {
 
   const handleStripeCheckout = async (price: Price) => {
     setPriceIdLoading(price.id);
-    if (!user) {
+    if (!user || user.is_anonymous) {
       setPriceIdLoading(undefined);
-      return router.push('/signin/signup');
+      return router.push('/signin');
     }
     const { errorRedirect, sessionId } = await checkoutWithStripe(
       price,

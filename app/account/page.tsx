@@ -18,7 +18,7 @@ export default async function Account() {
     getSubscription(supabase)
   ]);
 
-  if (!user) {
+  if (!user || user.is_anonymous) {
     return redirect('/signin');
   }
 

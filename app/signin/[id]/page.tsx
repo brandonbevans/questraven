@@ -45,7 +45,7 @@ export default async function SignIn(props: any) {
 
   const user = await getUser(supabase);
 
-  if (user && viewProp !== 'update_password') {
+  if (user && !user.is_anonymous && viewProp !== 'update_password') {
     return redirect('/');
   } else if (!user && viewProp === 'update_password') {
     return redirect('/signin/signup');

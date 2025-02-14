@@ -8,7 +8,6 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    console.log('No user found for raven, need to get anonymous user');
     /// check cookies for anon access token and refresh token
     const { data } = await supabase.auth.signInAnonymously();
     if (!data.user) {
@@ -83,13 +82,14 @@ export const createChat = cache(
   async (supabase: SupabaseClient, userId: string, gameId: string) => {
     const { data, error } = await supabase
       .from('chats')
-      .insert({
+      .upsert({
         user_id: userId,
         game_id: gameId
       })
+      .select('*')
       .single();
     if (error) {
-      throw new Error('Failed to create chat', error);
+      throw new Error('Failed to create chat: ' + error.message);
     }
     return data;
   }

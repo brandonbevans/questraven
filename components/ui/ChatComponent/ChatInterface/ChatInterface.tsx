@@ -27,7 +27,7 @@ export default function ChatInterface({
     }
   );
   const FREE_MESSAGE_LIMIT = parseInt(
-    process.env.NEXT_PUBLIC_FREE_MESSAGE_LIMIT ?? '5'
+    process.env.NEXT_PUBLIC_FREE_MESSAGE_LIMIT ?? '2'
   );
   const supabase = createClient();
 
