@@ -8,6 +8,7 @@ import { createClient } from '@/utils/supabase/client';
 import {
   createChat,
   getChatByUserAndGame,
+  getGame,
   getGames,
   getUser
 } from '@/utils/supabase/queries';
@@ -16,7 +17,7 @@ import { Suspense, useEffect, useState } from 'react';
 
 type Game = Tables<'games'>;
 
-function RavenContent() {
+function RavenContent({ searchParams }: { searchParams?: { game?: string } }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedGame, setSelectedGame] = useState<Game | undefined>();
   const [isLoading, setIsLoading] = useState(true);
@@ -61,11 +62,20 @@ function RavenContent() {
     setMounted(true);
     async function loadInitialGame() {
       try {
-        // Prefetch games data
+        // Prefetch games data and user
         const gamesPromise = getGames(supabase);
         const userPromise = getUser(supabase);
 
-        const [games, user] = await Promise.all([gamesPromise, userPromise]);
+        // If game parameter is provided, also fetch that specific game
+        const gamePromises = [gamesPromise, userPromise] as const;
+        const specificGamePromise = searchParams?.game
+          ? getGame(supabase, searchParams.game)
+          : Promise.resolve(null);
+
+        const [games, user, specificGame] = await Promise.all([
+          ...gamePromises,
+          specificGamePromise
+        ]);
 
         if (!games || games.length === 0) {
           throw new Error('Failed to fetch initial game');
@@ -74,16 +84,18 @@ function RavenContent() {
           throw new Error('Failed to fetch user');
         }
 
-        setSelectedGame(games[0]);
+        // Use the specific game if it exists, otherwise use the first game
+        const initialGame = specificGame || games[0];
+        setSelectedGame(initialGame);
 
-        // Pre-initialize chat for the first game
+        // Pre-initialize chat for the initial game
         let chat = await getChatByUserAndGame(
           supabase,
-          user?.id ?? '',
-          games[0].id
+          user.id,
+          initialGame.id
         );
         if (!chat) {
-          chat = await createChat(supabase, user?.id ?? '', games[0].id);
+          chat = await createChat(supabase, user.id, initialGame.id);
         }
         setUserChatId(chat.id);
       } catch (error) {
@@ -94,7 +106,7 @@ function RavenContent() {
     }
 
     loadInitialGame();
-  }, []);
+  }, [searchParams?.game]);
 
   // Only show the full screen loader if the page isn't mounted or if there isn't an initial game
   if (!mounted || !selectedGame) {
@@ -145,10 +157,14 @@ function RavenContent() {
   );
 }
 
-export default function Raven() {
+export default function Raven({
+  searchParams
+}: {
+  searchParams?: { game?: string };
+}) {
   return (
     <Suspense>
-      <RavenContent />
+      <RavenContent searchParams={searchParams} />
     </Suspense>
   );
 }

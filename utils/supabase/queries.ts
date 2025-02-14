@@ -8,7 +8,6 @@ export const getUser = cache(async (supabase: SupabaseClient) => {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    /// check cookies for anon access token and refresh token
     const { data } = await supabase.auth.signInAnonymously();
     if (!data.user) {
       throw new Error('Failed to sign in anonymously');
