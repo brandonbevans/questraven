@@ -155,7 +155,7 @@ export default function ChatInterface({
               <div
                 className={`flex-1 ${isLimitReached ? 'pointer-events-none opacity-50' : ''}`}
               >
-                <Thread />
+                <Thread game={selectedGame} />
               </div>
             )}
           </div>

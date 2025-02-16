@@ -11,12 +11,15 @@ import type { FC } from 'react';
 import { MarkdownText } from '@/components/assistant-ui/markdown-text';
 import { TooltipIconButton } from '@/components/assistant-ui/tooltip-icon-button';
 import { Avatar } from '@/components/ui/avatar';
+import { Tables } from '@/types_db';
 
-export const Thread: FC = () => {
+type Game = Tables<'games'>;
+
+export const Thread: FC<{ game: Game }> = ({ game }) => {
   return (
     <ThreadPrimitive.Root className="bg-zinc-950 h-full">
       <ThreadPrimitive.Viewport className="flex h-full flex-col items-center overflow-y-scroll scroll-smooth bg-inherit px-4 pt-8">
-        <ThreadWelcome />
+        <ThreadWelcome game={game} />
         <ThreadPrimitive.Messages
           components={{
             UserMessage: UserMessage,
@@ -34,7 +37,7 @@ export const Thread: FC = () => {
   );
 };
 
-const ThreadWelcome: FC = () => {
+const ThreadWelcome: FC<{ game: Game }> = ({ game }) => {
   return (
     <ThreadPrimitive.Empty>
       <div className="flex flex-grow flex-col items-center justify-center">
@@ -42,7 +45,9 @@ const ThreadWelcome: FC = () => {
           <BirdIcon className="text-zinc-100 size-6 m-auto" />
           {/* <AvatarFallback className="text-zinc-100">C</AvatarFallback> */}
         </Avatar>
-        <p className="mt-4 font-medium text-zinc-100">Speak to the Raven.</p>
+        <p className="mt-4 font-medium text-zinc-100">
+          Ask me anything about {game.name}.
+        </p>
       </div>
     </ThreadPrimitive.Empty>
   );

@@ -22,7 +22,9 @@ export default function RavenContent({
 }: {
   initialGameNamespace?: string;
 }) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(
+    typeof window !== 'undefined' && window.innerWidth >= 768
+  );
   const [selectedGame, setSelectedGame] = useState<Game | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
