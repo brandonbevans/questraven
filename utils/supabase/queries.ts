@@ -124,7 +124,7 @@ export const getMessagesCount = cache(
       .select('messages')
       .gte(
         'updated_at',
-        new Date(Date.now() - 16 * 60 * 60 * 1000).toISOString()
+        new Date(Date.now() - 190 * 60 * 60 * 1000).toISOString()
       )
       .eq('user_id', userId);
 

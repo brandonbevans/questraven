@@ -100,7 +100,8 @@ export default function ChatInterface({
             {isLimitReached ? (
               <div className="pb-4 flex items-center justify-between">
                 <span className="text-red-400">
-                  0 credits left for today. Come back tomorrow.
+                  0 credits left for today. Check back in a few days, or
+                  subscribe for unlimited access.
                 </span>
                 <button
                   className="ml-2 px-4 py-1 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-md transition-colors"
