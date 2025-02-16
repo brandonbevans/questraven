@@ -9,8 +9,6 @@ import { getContext } from '@/utils/postgres/context';
 import { createClient } from '@/utils/supabase/client';
 import { saveChat } from '@/utils/supabase/queries';
 import { createOpenAI } from '@ai-sdk/openai';
-// IMPORTANT! Set the runtime to edge
-export const runtime = 'edge';
 
 const supabase = createClient();
 const openai = createOpenAI({
