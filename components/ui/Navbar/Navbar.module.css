@@ -1,5 +1,5 @@
 .root {
-  @apply sticky top-0 bg-zinc-950 border-b border-zinc-800 z-40 transition-all duration-150 h-16 md:h-20;
+  @apply sticky top-0 bg-zinc-950 border-b border-zinc-800 z-40 transition-all duration-150 h-14 sm:h-16 md:h-20;
 }
 
 .link {
@@ -15,5 +15,5 @@
 }
 
 .logo {
-  @apply cursor-pointer rounded-full transform duration-100 ease-in-out;
+  @apply cursor-pointer rounded-full transform duration-100 ease-in-out scale-75 sm:scale-90 md:scale-100;
 }

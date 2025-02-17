@@ -62,11 +62,8 @@ export function useChatInterface({ selectedGame }: { selectedGame: Game }) {
 
         if (!chat) {
           chat = await createChat(supabase, user?.id ?? '', selectedGame.id);
-          console.log('chat messages:', chat.messages);
-        } else {
-          console.log('chat messages:', chat.messages);
-          setMessages(chat.messages);
         }
+        setMessages(chat.messages);
         setUserChatId(chat.id);
       } catch (error) {
         console.log('Error fetching chat:', error);

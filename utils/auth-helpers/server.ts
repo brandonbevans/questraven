@@ -183,7 +183,6 @@ export async function signUp(formData: FormData) {
   const user = (await supabase.auth.getUser()).data.user;
 
   if (user && user.is_anonymous) {
-    console.log('User is anonymous: ', user.id);
     const { error, data } = await supabase.auth.updateUser({
       email,
       password

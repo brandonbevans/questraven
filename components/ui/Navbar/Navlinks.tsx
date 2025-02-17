@@ -56,8 +56,8 @@ export default function Navlinks({ user }: NavlinksProps) {
   };
 
   return (
-    <div className="relative flex flex-row items-center py-4 md:py-6">
-      <div className="flex items-center gap-4">
+    <div className="relative flex flex-row items-center py-2 sm:py-4 md:py-6">
+      <div className="flex items-center gap-2 sm:gap-4">
         <Link href="/raven" className={s.logo} aria-label="Logo">
           <Logo2 width={128} height={128} />
         </Link>
@@ -65,7 +65,7 @@ export default function Navlinks({ user }: NavlinksProps) {
           <Button
             variant="default"
             size="sm"
-            className="bg-blue-600 hover:bg-blue-500 text-zinc-50"
+            className="bg-blue-600 hover:bg-blue-500 text-zinc-50 text-xs sm:text-sm whitespace-nowrap"
             onClick={() => router?.push('/subscribe')}
           >
             Subscribe Now
@@ -73,7 +73,7 @@ export default function Navlinks({ user }: NavlinksProps) {
         )}
       </div>
 
-      <div className="flex items-center gap-4 ml-auto">
+      <div className="flex items-center gap-2 sm:gap-4 ml-auto">
         {user && !user.is_anonymous ? (
           <>
             <Button
@@ -91,10 +91,10 @@ export default function Navlinks({ user }: NavlinksProps) {
               variant="ghost"
               size="sm"
               onClick={handleSignOut}
-              className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 inline-flex items-center gap-2"
+              className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800 inline-flex items-center gap-1 sm:gap-2 text-xs sm:text-sm"
             >
-              <LogOut className="w-4 h-4" />
-              Sign Out
+              <LogOut className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden xs:inline">Sign Out</span>
             </Button>
             <Button
               variant="ghost"
@@ -103,9 +103,9 @@ export default function Navlinks({ user }: NavlinksProps) {
               className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
             >
               {mounted && theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
+                <Sun className="h-3 w-3 sm:h-4 sm:w-4" />
               ) : (
-                <Moon className="h-4 w-4" />
+                <Moon className="h-3 w-3 sm:h-4 sm:w-4" />
               )}
               <span className="sr-only">Toggle theme</span>
             </Button>
@@ -113,7 +113,7 @@ export default function Navlinks({ user }: NavlinksProps) {
         ) : (
           <>
             <Link href="/signin" className={s.link}>
-              Sign In
+              <span className="text-xs sm:text-sm">Sign In</span>
             </Link>
             <Button
               variant="ghost"
@@ -122,9 +122,9 @@ export default function Navlinks({ user }: NavlinksProps) {
               className="text-zinc-400 hover:text-zinc-50 hover:bg-zinc-800"
             >
               {mounted && theme === 'dark' ? (
-                <Sun className="h-4 w-4" />
+                <Sun className="h-3 w-3 sm:h-4 sm:w-4" />
               ) : (
-                <Moon className="h-4 w-4" />
+                <Moon className="h-3 w-3 sm:h-4 sm:w-4" />
               )}
               <span className="sr-only">Toggle theme</span>
             </Button>

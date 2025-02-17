@@ -13,7 +13,7 @@ export default async function Navbar() {
       <a href="#skip" className="sr-only focus:not-sr-only">
         Skip to content
       </a>
-      <div className="mx-auto px-16">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Navlinks user={user} />
       </div>
     </nav>
