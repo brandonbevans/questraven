@@ -38,8 +38,6 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLFormElement>) {
 
   const user = (await supabase.auth.getUser()).data.user;
   if (user && user.is_anonymous) {
-    console.log('User is anonymous: ', user.id);
-    console.log('Linking identity');
     const { data, error } = await supabase.auth.linkIdentity({
       provider: provider,
       options: {

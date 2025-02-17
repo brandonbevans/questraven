@@ -20,7 +20,8 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
 export default async function SignIn(props: any) {
-  const { params, searchParams } = props;
+  let { params, searchParams } = await props;
+  params = await params;
 
   const { allowOauth, allowEmail, allowPassword } = getAuthTypes();
   const viewTypes = getViewTypes();
@@ -44,6 +45,9 @@ export default async function SignIn(props: any) {
   const supabase = await createClient();
 
   const user = await getUser(supabase);
+  if (user && user.is_anonymous) {
+    console.log('User is anonymous: ', user.id);
+  }
 
   if (user && !user.is_anonymous && viewProp !== 'update_password') {
     return redirect('/');

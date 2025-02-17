@@ -179,6 +179,23 @@ export async function signUp(formData: FormData) {
   }
 
   const supabase = await createClient();
+
+  const user = (await supabase.auth.getUser()).data.user;
+
+  if (user && user.is_anonymous) {
+    console.log('User is anonymous: ', user.id);
+    const { error, data } = await supabase.auth.updateUser({
+      email,
+      password
+    });
+    redirectPath = getStatusRedirect(
+      '/',
+      'Success!',
+      'Please check your email for a confirmation link. You may now close this tab.'
+    );
+    return redirectPath;
+  }
+
   const { error, data } = await supabase.auth.signUp({
     email,
     password,
