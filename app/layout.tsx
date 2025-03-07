@@ -107,7 +107,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         {process.env.NODE_ENV !== 'production' && (
           <>
             <Script
-              src="http://localhost:8000/pixel.gif"
+              src="https://api.adweave.ai/pixel.js?app_id=questraven-test"
               strategy="afterInteractive"
             />
             <Script id="openpixel-init" strategy="afterInteractive">
