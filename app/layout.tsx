@@ -106,6 +106,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
         {/* OpenPixel Tracking Script */}
         {process.env.NODE_ENV !== 'production' && (
           <>
+            <Script id="adweave-debug" strategy="afterInteractive">
+              {`window.ADWEAVE_DEBUG = true;`}
+            </Script>
             <Script
               src="https://api.adweave.ai/pixel.js?app_id=questraven-test"
               strategy="afterInteractive"
