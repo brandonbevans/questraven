@@ -4,7 +4,6 @@ import '@/styles/globals.scss';
 import { GoogleAnalytics, GoogleTagManager } from '@next/third-parties/google';
 import { Metadata, Viewport } from 'next';
 import { ThemeProvider } from 'next-themes';
-import Head from 'next/head';
 import Script from 'next/script';
 import { PropsWithChildren } from 'react';
 
@@ -47,14 +46,14 @@ export const metadata: Metadata = {
     statusBarStyle: 'default',
     capable: true
   },
-  verification: {
-    google: 'YOUR_DATA',
-    yandex: ['YOUR_DATA'],
-    other: {
-      'msvalidate.01': ['YOUR_DATA'],
-      'facebook-domain-verification': ['YOUR_DATA']
-    }
-  },
+  // verification: {
+  //   google: 'YOUR_DATA',
+  //   yandex: ['YOUR_DATA'],
+  //   other: {
+  //     'msvalidate.01': ['YOUR_DATA'],
+  //     'facebook-domain-verification': ['YOUR_DATA']
+  //   }
+  // },
   icons: {
     icon: [
       {
@@ -88,21 +87,41 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <Head>
+      <head>
         <Script
           id="json-ld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           strategy="beforeInteractive"
         />
-      </Head>
-      {process.env.VERCEL_ENV === 'production' && (
-        <>
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
-          <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID ?? ''} />
-        </>
-      )}
+      </head>
       <body>
+        {process.env.VERCEL_ENV === 'production' && (
+          <>
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
+            <GoogleTagManager gtmId={process.env.NEXT_PUBLIC_GTM_ID ?? ''} />
+          </>
+        )}
+
+        {/* OpenPixel Tracking Script */}
+        {process.env.NODE_ENV !== 'production' && (
+          <>
+            <Script
+              src="http://localhost:8000/pixel.gif"
+              strategy="afterInteractive"
+            />
+            <Script id="openpixel-init" strategy="afterInteractive">
+              {`
+                window.opix = window.opix || function() {
+                  (window.opix.q = window.opix.q || []).push(arguments);
+                };
+                opix('init', 'questraven-test'); 
+                opix('track', 'PageView');
+              `}
+            </Script>
+          </>
+        )}
+
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -112,18 +131,18 @@ export default function RootLayout({ children }: PropsWithChildren) {
           <Navbar />
           <main
             id="skip"
-            className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+            className="min-h-[calc(100dvh-4rem)] md:min-h-[calc(100dvh-5rem)]"
           >
             {children}
             {process.env.NODE_ENV === 'production' && (
               <Script id="clarity-script" strategy="afterInteractive">
                 {`
-            (function(c,l,a,r,i,t,y){
-                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-            })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID}");
-            `}
+                (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window, document, "clarity", "script", "${process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID}");
+                `}
               </Script>
             )}
           </main>
