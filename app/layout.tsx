@@ -104,26 +104,24 @@ export default function RootLayout({ children }: PropsWithChildren) {
         )}
 
         {/* OpenPixel Tracking Script */}
-        {process.env.NODE_ENV !== 'production' && (
-          <>
-            <Script id="adweave-debug" strategy="afterInteractive">
-              {`window.ADWEAVE_DEBUG = true;`}
-            </Script>
-            <Script
-              src="https://api.adweave.ai/pixel.js?app_id=questraven-test"
-              strategy="afterInteractive"
-            />
-            <Script id="openpixel-init" strategy="afterInteractive">
-              {`
+        <>
+          <Script id="adweave-debug" strategy="afterInteractive">
+            {`window.ADWEAVE_DEBUG = true;`}
+          </Script>
+          <Script
+            src="https://api.adweave.ai/pixel.js?app_id=questraven-test"
+            strategy="afterInteractive"
+          />
+          <Script id="openpixel-init" strategy="afterInteractive">
+            {`
                 window.opix = window.opix || function() {
                   (window.opix.q = window.opix.q || []).push(arguments);
                 };
                 opix('init', 'questraven-test'); 
                 opix('track', 'PageView');
               `}
-            </Script>
-          </>
-        )}
+          </Script>
+        </>
 
         <ThemeProvider
           attribute="class"
